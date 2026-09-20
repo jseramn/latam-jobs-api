@@ -1,36 +1,53 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# LatamJobs API
 
-## Getting Started
+API REST que une **Computrabajo, Bumeran, OCC, ZonaJobs y Laborum** en una sola llamada. Salario parseado a número y moneda. Ofertas deduplicadas. JSON limpio, listo para integrar.
 
-First, run the development server:
+Built with Next.js 16 + Tailwind 4.
+
+## Status
+
+**Validating demand.** Si llegamos a 30 recruiters o HR-tech builders en LATAM, abrimos el acceso. Precio founding: **$49/mes** de por vida.
+
+## Stack
+
+- Next.js 16 (App Router, RSC)
+- Tailwind CSS 4 (con `@theme inline`)
+- Resend (audience management + transactional email)
+- Vercel (deploy target)
+
+## Local development
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
+cp .env.example .env.local  # add RESEND_API_KEY
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Environment variables
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Var | Required | Default | Purpose |
+| --- | --- | --- | --- |
+| `RESEND_API_KEY` | yes | — | Audience + email |
+| `RESEND_AUDIENCE_NAME` | no | `General` | Existing Resend audience |
+| `RESEND_FROM_EMAIL` | no | `LatamJobs <hola@jseramn.tech>` | From address |
+| `SEND_CONFIRMATION` | no | `false` | Set `true` to email new signups |
 
-## Learn More
+## Endpoints
 
-To learn more about Next.js, take a look at the following resources:
+- `GET /api/signup` — health check (returns ok + audience name)
+- `POST /api/signup` — body: `{email, role, country}` → adds contact to Resend
+- `GET /api/stats` — current signup count + progress to 30
+- `GET /api/preview` — sample job search results (real scraper lands next week)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Deploy
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Push to `main` → Vercel auto-deploys. Set env vars in Vercel project settings (Production).
 
-## Deploy on Vercel
+## What's next
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Real scraper for Computrabajo (Playwright) + Bumeran (server-rendered)
+- OpenAPI spec + auto-generated docs
+- Stripe integration for paid plans
+- Rate limiting per API key
