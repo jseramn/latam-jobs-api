@@ -9,12 +9,13 @@
     "scrape": "node scripts/smoke.js"
   },
   "dependencies": {
-    "express": "^4.21.0",
-    "cors": "^2.8.5",
-    "playwright": "^1.48.0",
+    "@vercel/analytics": "^2.0.1",
     "cheerio": "^1.0.0",
-    "pg": "^8.13.0",
+    "cors": "^2.8.5",
     "dotenv": "^16.4.5",
+    "express": "^4.21.0",
+    "pg": "^8.13.0",
+    "playwright": "^1.48.0",
     "resend": "^4.0.0",
     "stripe": "^17.0.0"
   }
