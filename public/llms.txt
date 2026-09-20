@@ -1,0 +1,95 @@
+# LatamJobs API
+
+> Una API REST que une Computrabajo, Bumeran, OCC, ZonaJobs y Laborum en una sola llamada. Salario parseado a número y moneda. Ofertas deduplicadas. Hecho para recruiters y HR-tech builders en LATAM.
+
+## What this is
+
+LatamJobs API is a unified job board API for Latin America. Instead of opening 5 browser tabs and copy-pasting into Excel, you call one endpoint and get back structured JSON with normalized salaries and deduplicated postings.
+
+## Status
+
+**Validating demand.** Si llegamos a 30 recruiters o HR-tech builders en LATAM, abrimos el acceso. Precio founding: $49/mes de por vida.
+
+- Pricing: https://latam-jobs-api.vercel.app/#pricing
+- Demo: https://latam-jobs-api.vercel.app/#demo
+- Signup: https://latam-jobs-api.vercel.app/#signup
+
+## Endpoints
+
+### GET /v1/search
+Search jobs across all portals (Computrabajo, Bumeran, OCC, ZonaJobs, Laborum).
+
+Parameters:
+- `q` (string, required): keyword — job title, skill, company
+- `country` (string): comma-separated ISO codes (mx, co, ar, cl, pe, uy)
+- `salary_min` (number): minimum salary in USD
+- `limit` (number): 1-100, default 20
+
+Returns:
+```json
+{
+  "results": [
+    {
+      "id": "abc123",
+      "title": "Backend Developer Python",
+      "company": "Mercado Libre",
+      "location": "Ciudad de México, MX",
+      "salary": {
+        "min": 45000,
+        "max": 70000,
+        "currency": "MXN",
+        "period": "monthly"
+      },
+      "posted_at": "2026-09-19T14:22:00Z",
+      "sources": ["computrabajo", "bumeran"],
+      "url": "https://..."
+    }
+  ],
+  "meta": {
+    "total": 1247,
+    "fetched_ms": 3120
+  }
+}
+```
+
+### POST /v1/webhooks
+Subscribe to job notifications for keywords.
+
+### GET /v1/jobs/:id
+Fetch a single job detail by ID.
+
+## Authentication
+
+`Authorization: Bearer YOUR_API_KEY` header. Keys are issued after early access.
+
+## Rate limits
+
+- Free: 500 calls/mes
+- Indie: 10,000 calls/mes
+- Scale: 100,000 calls/mes
+
+## Sources scraped
+
+- Computrabajo (19 countries)
+- Bumeran (AR, MX, CL)
+- OCC Mundial (MX)
+- ZonaJobs (AR)
+- Laborum (CL)
+- El Empleo (CO)
+
+## Use cases
+
+- ATS that needs LATAM coverage
+- HR-tech SaaS building for recruiters
+- AI agents doing job research
+- Market research on LATAM hiring trends
+- Salary benchmarking across countries
+
+## Contact
+
+- Email: hola@latam-jobs.dev
+- GitHub: https://github.com/jseramn/latam-jobs-api
+
+## Full docs
+
+For full OpenAPI spec and detailed examples: https://latam-jobs-api.vercel.app/docs

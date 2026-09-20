@@ -1,0 +1,105 @@
+{
+  "name": "LatamJobs API",
+  "version": "0.1.0",
+  "description": "Unified job board API for Latin America (Computrabajo, Bumeran, OCC, ZonaJobs, Laborum, El Empleo).",
+  "homepage": "https://latam-jobs-api.vercel.app",
+  "api_base": "https://api.latam-jobs.dev",
+  "logo": "https://latam-jobs-api.vercel.app/logo.png",
+  "contact": {
+    "email": "hola@latam-jobs.dev",
+    "github": "https://github.com/jseramn/latam-jobs-api"
+  },
+  "capabilities": {
+    "search": {
+      "description": "Search job postings across all configured LATAM portals",
+      "endpoint": "/v1/search",
+      "method": "GET",
+      "parameters": {
+        "q": {
+          "type": "string",
+          "required": true,
+          "description": "Keyword — job title, skill, or company"
+        },
+        "country": {
+          "type": "string",
+          "required": false,
+          "description": "Comma-separated ISO 2-letter country codes",
+          "enum": ["mx", "co", "ar", "cl", "pe", "uy", "br"]
+        },
+        "salary_min": {
+          "type": "number",
+          "required": false,
+          "description": "Minimum monthly salary in USD"
+        },
+        "salary_max": {
+          "type": "number",
+          "required": false,
+          "description": "Maximum monthly salary in USD"
+        },
+        "limit": {
+          "type": "integer",
+          "required": false,
+          "default": 20,
+          "min": 1,
+          "max": 100
+        },
+        "offset": {
+          "type": "integer",
+          "required": false,
+          "default": 0
+        },
+        "posted_within": {
+          "type": "integer",
+          "required": false,
+          "default": 30,
+          "description": "Days since posted"
+        },
+        "remote": {
+          "type": "boolean",
+          "required": false,
+          "default": false
+        }
+      }
+    },
+    "job_detail": {
+      "description": "Get full detail for a single job by ID",
+      "endpoint": "/v1/jobs/:id",
+      "method": "GET"
+    },
+    "webhooks": {
+      "description": "Subscribe to new job notifications matching a query",
+      "endpoint": "/v1/webhooks",
+      "method": "POST"
+    },
+    "stats": {
+      "description": "Public index statistics (no auth required)",
+      "endpoint": "/v1/stats",
+      "method": "GET",
+      "auth_required": false
+    }
+  },
+  "authentication": {
+    "type": "bearer",
+    "header": "Authorization",
+    "scheme": "Bearer YOUR_API_KEY",
+    "signup": "https://latam-jobs-api.vercel.app/#signup"
+  },
+  "rate_limits": {
+    "free": { "calls_per_month": 500 },
+    "indie": { "calls_per_month": 10000, "price_usd_per_month": 49 },
+    "scale": { "calls_per_month": 100000, "price_usd_per_month": 199 }
+  },
+  "data_sources": [
+    { "id": "computrabajo", "country_count": 19, "type": "scrape", "update_frequency_min": 30 },
+    { "id": "bumeran", "country_count": 3, "type": "scrape", "update_frequency_min": 30 },
+    { "id": "occ", "country_count": 1, "type": "scrape", "update_frequency_min": 30 },
+    { "id": "zonajobs", "country_count": 1, "type": "scrape", "update_frequency_min": 30 },
+    { "id": "laborum", "country_count": 1, "type": "scrape", "update_frequency_min": 30 },
+    { "id": "elempleo", "country_count": 1, "type": "scrape", "update_frequency_min": 30 }
+  ],
+  "openapi": "https://latam-jobs-api.vercel.app/api/openapi.json",
+  "mcp_server": "https://latam-jobs-api.vercel.app/api/mcp",
+  "llms_txt": "https://latam-jobs-api.vercel.app/llms.txt",
+  "llms_full_txt": "https://latam-jobs-api.vercel.app/llms-full.txt",
+  "openai_plugin": "https://latam-jobs-api.vercel.app/.well-known/openai-plugin.json"
+}

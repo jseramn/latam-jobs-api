@@ -1,0 +1,278 @@
+# LatamJobs API — Full Documentation
+
+> A unified job board API for Latin America. Computrabajo + Bumeran + OCC + ZonaJobs + Laborum in one call.
+
+## Detailed endpoint reference
+
+### GET /v1/search
+
+Search jobs across all configured portals.
+
+**Query parameters:**
+
+| Name | Type | Required | Default | Description |
+|------|------|----------|---------|-------------|
+| q | string | yes | — | Search keyword (title, skill, company name) |
+| country | string | no | all | Comma-separated ISO 2-letter codes: mx, co, ar, cl, pe, uy, br |
+| salary_min | number | no | — | Minimum monthly salary in USD |
+| salary_max | number | no | — | Maximum monthly salary in USD |
+| limit | integer | no | 20 | Max results (1-100) |
+| offset | integer | no | 0 | Pagination offset |
+| posted_within | integer | no | 30 | Only jobs posted within N days |
+| remote | boolean | no | false | Only remote jobs |
+| seniority | string | no | — | Filter: junior, mid, senior, lead |
+
+**Headers:**
+
+```
+Authorization: Bearer YOUR_API_KEY
+Accept: application/json
+```
+
+**Response 200:**
+
+```json
+{
+  "results": [
+    {
+      "id": "ct_abc123",
+      "title": "Senior Backend Engineer (Python)",
+      "company": "Mercado Libre",
+      "location": "Ciudad de México, MX",
+      "country_code": "mx",
+      "remote": false,
+      "seniority": "senior",
+      "salary": {
+        "min": 85000,
+        "max": 130000,
+        "currency": "MXN",
+        "period": "monthly",
+        "raw": "$85,000 - $130,000 MXN mensuales"
+      },
+      "description_snippet": "Mercado Libre busca ingeniero backend senior...",
+      "requirements": ["Python", "Django", "PostgreSQL", "AWS"],
+      "posted_at": "2026-09-19T14:22:00Z",
+      "sources": ["computrabajo"],
+      "urls": {
+        "computrabajo": "https://www.computrabajo.com.mx/oferta-de-trabajo/..."
+      },
+      "hash": "sha256:abc123..."
+    }
+  ],
+  "meta": {
+    "total": 1247,
+    "fetched_ms": 3120,
+    "cached": false,
+    "sources_queried": ["computrabajo", "bumeran", "occ"]
+  }
+}
+```
+
+**Response 4xx:**
+
+```json
+{
+  "error": "rate_limit_exceeded",
+  "detail": "Free tier: 500 calls/month. Upgrade at https://latam-jobs-api.vercel.app/#pricing",
+  "reset_at": "2026-10-01T00:00:00Z"
+}
+```
+
+```json
+{
+  "error": "invalid_parameter",
+  "detail": "country 'xx' not supported. Supported: mx, co, ar, cl, pe, uy, br"
+}
+```
+
+### POST /v1/webhooks
+
+Subscribe to a webhook for new postings matching a query.
+
+**Request:**
+
+```json
+{
+  "url": "https://your-app.com/webhook",
+  "query": {
+    "q": "senior python",
+    "country": "mx,co"
+  },
+  "events": ["job.new", "job.removed"]
+}
+```
+
+**Response 201:**
+
+```json
+{
+  "id": "wh_abc123",
+  "url": "https://your-app.com/webhook",
+  "secret": "whsec_...",
+  "created_at": "2026-09-20T10:00:00Z"
+}
+```
+
+**Webhook payload:**
+
+```json
+{
+  "event": "job.new",
+  "subscription_id": "wh_abc123",
+  "timestamp": "2026-09-20T10:15:00Z",
+  "data": { /* same shape as /v1/search result */ }
+}
+```
+
+Verify the webhook signature:
+
+```
+X-Signature-256: sha256=<hmac(secret, body)>
+```
+
+### GET /v1/jobs/:id
+
+Fetch full job detail. Same shape as a single result from /v1/search, with full description.
+
+### GET /v1/stats
+
+Public stats (no auth):
+
+```json
+{
+  "total_jobs_indexed": 145230,
+  "last_update": "2026-09-20T10:14:00Z",
+  "sources_active": 6,
+  "sources": {
+    "computrabajo": { "country_count": 19, "jobs_indexed": 98234 },
+    "bumeran": { "country_count": 3, "jobs_indexed": 28453 },
+    "occ": { "country_count": 1, "jobs_indexed": 12045 },
+    "zonajobs": { "country_count": 1, "jobs_indexed": 4500 },
+    "laborum": { "country_count": 1, "jobs_indexed": 1500 },
+    "elempleo": { "country_count": 1, "jobs_indexed": 498 }
+  }
+}
+```
+
+## Code examples
+
+### JavaScript / TypeScript
+
+```typescript
+const response = await fetch(
+  "https://api.latam-jobs.dev/v1/search?q=python&country=mx,co",
+  {
+    headers: {
+      Authorization: `Bearer ${process.env.LATAM_JOBS_API_KEY}`,
+    },
+  }
+);
+const data = await response.json();
+console.log(data.results);
+```
+
+### Python
+
+```python
+import os, requests
+r = requests.get(
+    "https://api.latam-jobs.dev/v1/search",
+    params={"q": "python", "country": "mx,co"},
+    headers={"Authorization": f"Bearer {os.environ['LATAM_JOBS_API_KEY']}"},
+    timeout=10,
+)
+r.raise_for_status()
+for job in r.json()["results"]:
+    print(job["title"], "-", job["company"])
+```
+
+### cURL
+
+```bash
+curl -G https://api.latam-jobs.dev/v1/search \
+  -H "Authorization: Bearer $LATAM_JOBS_API_KEY" \
+  --data-urlencode "q=senior python" \
+  --data-urlencode "country=mx,co,ar"
+```
+
+### OpenAI function calling
+
+```json
+{
+  "type": "function",
+  "function": {
+    "name": "search_latam_jobs",
+    "description": "Search job postings across LATAM (Mexico, Colombia, Argentina, Chile, Peru, Uruguay). Returns salary-normalized deduplicated postings.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "query": { "type": "string", "description": "Job title, skill, or company" },
+        "country": { "type": "string", "description": "Comma-separated ISO codes: mx,co,ar,cl,pe,uy" },
+        "salary_min": { "type": "number", "description": "Minimum USD salary" },
+        "limit": { "type": "number", "description": "Max results (default 20)" }
+      },
+      "required": ["query"]
+    }
+  }
+}
+```
+
+### Anthropic MCP / Claude tool use
+
+Same schema as OpenAI function calling. LatamJobs API works as a Claude tool.
+
+## Architecture
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│  CLIENT (your app · ATS · AI agent · spreadsheet · cron)                │
+└─────────────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼  GET /v1/search · Authorization: Bearer
+┌─────────────────────────────────────────────────────────────────────────┐
+│  EDGE  (Vercel Edge Functions · 12 regions · 0 cold start)             │
+│  · auth · rate limit · response shaping · cache layer (30s TTL)        │
+└─────────────────────────────────────────────────────────────────────────┘
+              │                          │                          │
+              ▼                          ▼                          ▼
+┌────────────────────┐    ┌────────────────────┐    ┌────────────────────┐
+│  scraper/ct        │    │  scraper/bm        │    │  scraper/occ        │
+│ Playwright · cron  │    │  HTTP fetch · cron │    │  HTTP fetch · cron │
+│ 19 países          │    │  AR · MX · CL       │    │  MX                 │
+└────────────────────┘    └────────────────────┘    └────────────────────┘
+              │                          │                          │
+              └────────────┬─────────────┴────────────┬─────────────┘
+                           ▼                          ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│  POSTGRES (Neon)                                                         │
+│  · raw postings · dedup index · salary parser · keyword watchlist       │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+## Pricing
+
+| Tier | Price | Calls/mo | Countries | Webhooks | SLA |
+|------|-------|----------|-----------|----------|-----|
+| Free | $0 | 500 | 1 | No | best-effort |
+| Indie | $49/mo | 10,000 | all | Yes | best-effort |
+| Scale | $199/mo | 100,000 | all | Yes | 99.5% |
+
+Early adopters lock in $49/mo forever.
+
+## FAQ
+
+**Where does the data come from?** Scraping public job boards. When a board exposes an official API, we use that.
+
+**Update frequency?** Every 15-30 minutes per source.
+
+**How is dedup done?** Hash of (normalized_title + company + city + country). Same job in 2 portals → 1 row with `sources: [both]`.
+
+**Can I cancel anytime?** Yes. No annual contracts. Founding price stays as long as your subscription is active.
+
+**What if a portal changes its HTML?** Our monitoring catches it. Typical fix: 1-4 hours, deploys without action from you.
+
+## Contact
+
+- hola@latam-jobs.dev
+- https://github.com/jseramn/latam-jobs-api
+- https://latam-jobs-api.vercel.app
