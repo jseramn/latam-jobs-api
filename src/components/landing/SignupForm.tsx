@@ -69,7 +69,7 @@ export function SignupForm({ variant = "default", ctaLabel = "Sumate a la lista"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             disabled={status === "loading"}
-            className="w-full px-4 py-3 rounded-lg bg-card border border-border text-foreground placeholder:text-muted focus:outline-none focus:border-accent transition-colors disabled:opacity-50"
+            className="w-full px-4 py-3 bg-card border border-border text-foreground placeholder:text-muted focus:outline-none focus:border-accent transition-colors disabled:opacity-50"
           />
         </div>
         <div className="grid grid-cols-2 gap-3">
@@ -83,7 +83,7 @@ export function SignupForm({ variant = "default", ctaLabel = "Sumate a la lista"
               value={role}
               onChange={(e) => setRole(e.target.value)}
               disabled={status === "loading"}
-              className="w-full px-4 py-3 rounded-lg bg-card border border-border text-foreground focus:outline-none focus:border-accent transition-colors disabled:opacity-50"
+              className="w-full px-4 py-3 bg-card border border-border text-foreground focus:outline-none focus:border-accent transition-colors disabled:opacity-50"
             >
               <option value="">Soy...</option>
               <option value="recruiter">Recruiter</option>
@@ -103,7 +103,7 @@ export function SignupForm({ variant = "default", ctaLabel = "Sumate a la lista"
               value={country}
               onChange={(e) => setCountry(e.target.value)}
               disabled={status === "loading"}
-              className="w-full px-4 py-3 rounded-lg bg-card border border-border text-foreground focus:outline-none focus:border-accent transition-colors disabled:opacity-50"
+              className="w-full px-4 py-3 bg-card border border-border text-foreground focus:outline-none focus:border-accent transition-colors disabled:opacity-50"
             >
               <option value="">País...</option>
               <option value="MX">México</option>
@@ -121,7 +121,7 @@ export function SignupForm({ variant = "default", ctaLabel = "Sumate a la lista"
       <button
         type="submit"
         disabled={status === "loading"}
-        className="w-full px-6 py-3 rounded-lg bg-accent text-background font-semibold hover:bg-accent-deep transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-full px-6 py-3 bg-accent text-background font-semibold hover:bg-accent-deep transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {status === "loading" ? "Enviando..." : ctaLabel}
       </button>

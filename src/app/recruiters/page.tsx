@@ -59,7 +59,7 @@ export default function RecruitersPage() {
         </div>
       </div>
 
-      <div className="my-12 rounded-lg border border-border bg-card p-6">
+      <div className="my-12 border border-border bg-card p-6">
         <p className="text-xs text-muted mb-3">// roi_calculado</p>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <Metric label="horas ahorradas/semana" value="8-10" />
@@ -72,7 +72,7 @@ export default function RecruitersPage() {
         </p>
       </div>
 
-      <div className="rounded-lg border border-accent/30 bg-gradient-to-br from-card to-card-hover p-8 lg:p-12 text-center">
+      <div className=" border border-accent/30 bg-gradient-to-br from-card to-card-hover p-8 lg:p-12 text-center">
         <p className="text-xs text-accent uppercase tracking-wider mb-4">
           // call_to_action
         </p>

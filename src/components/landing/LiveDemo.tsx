@@ -115,12 +115,12 @@ export function LiveDemo() {
   };
 
   return (
-    <div className="rounded-xl border border-border bg-card overflow-hidden">
+    <div className=" border border-border bg-card overflow-hidden">
       <div className="border-b border-border bg-card-hover/40 px-5 py-3 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-danger" />
-          <span className="w-2 h-2 rounded-full bg-warning" />
-          <span className="w-2 h-2 rounded-full bg-accent" />
+          <span className="w-2 h-2 bg-danger" />
+          <span className="w-2 h-2 bg-warning" />
+          <span className="w-2 h-2 bg-accent" />
           <span className="ml-3 text-xs text-muted font-mono">
             api.latam-jobs.dev/v1/search
           </span>
@@ -139,12 +139,12 @@ export function LiveDemo() {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="python, desarrollador, marketing..."
-          className="flex-1 min-w-[180px] px-3 py-2 rounded-md bg-background border border-border text-sm font-mono focus:outline-none focus:border-accent"
+          className="flex-1 min-w-[180px] px-3 py-2 bg-background border border-border text-sm font-mono focus:outline-none focus:border-accent"
         />
         <select
           value={country}
           onChange={(e) => setCountry(e.target.value)}
-          className="px-3 py-2 rounded-md bg-background border border-border text-sm font-mono focus:outline-none focus:border-accent"
+          className="px-3 py-2 bg-background border border-border text-sm font-mono focus:outline-none focus:border-accent"
         >
           <option value="mx,co,ar">MX + CO + AR</option>
           <option value="mx">Solo México</option>
@@ -155,7 +155,7 @@ export function LiveDemo() {
         <button
           type="submit"
           disabled={loading}
-          className="px-4 py-2 rounded-md bg-accent text-background text-sm font-semibold hover:bg-accent-deep transition-colors disabled:opacity-50"
+          className="px-4 py-2 bg-accent text-background text-sm font-semibold hover:bg-accent-deep transition-colors disabled:opacity-50"
         >
           {loading ? "Buscando..." : "Probar"}
         </button>

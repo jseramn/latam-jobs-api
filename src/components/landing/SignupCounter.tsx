@@ -40,7 +40,7 @@ export function SignupCounter({ goal = 30 }: CounterProps) {
         </span>
         <span className="text-muted font-mono">{percent}%</span>
       </div>
-      <div className="h-1.5 bg-border rounded-full overflow-hidden">
+      <div className="h-1.5 bg-border overflow-hidden">
         <div
           className="h-full bg-accent transition-all duration-700 ease-out"
           style={{ width: `${percent}%` }}

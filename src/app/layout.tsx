@@ -24,7 +24,11 @@ export const metadata: Metadata = {
     "recruiters LATAM",
     "HR tech",
   ],
-  authors: [{ name: "Manuel" }],
+  authors: [{ name: "Jose Ramon Garcia" }],
+  icons: {
+    icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
+    shortcut: [{ url: "/favicon.svg", type: "image/svg+xml" }],
+  },
   openGraph: {
     title: "LatamJobs API",
     description:

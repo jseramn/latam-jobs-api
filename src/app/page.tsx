@@ -5,6 +5,7 @@ import { LiveDemo } from "@/components/landing/LiveDemo";
 import { AsciiScramble } from "@/components/effects/AsciiScramble";
 import { AsciiSweep } from "@/components/effects/AsciiSweep";
 import { DecryptReveal } from "@/components/effects/DecryptReveal";
+import { LatamMapLogo } from "@/components/brand/LatamMapLogo";
 
 export default function Home() {
   return (
@@ -12,6 +13,7 @@ export default function Home() {
       <TopBar />
       <main>
         <Hero />
+        <BrandLockup />
         <AsciiSweep height={80} />
         <PainSection />
         <DemoSection />
@@ -31,10 +33,22 @@ function TopBar() {
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-background/85 backdrop-blur-md">
       <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-2.5 group">
-          <div className="w-8 h-8 rounded-md border border-accent/40 bg-accent/10 flex items-center justify-center text-accent font-bold text-sm font-mono group-hover:bg-accent/20 transition-colors">
-            ▌
-          </div>
+        <Link href="/" className="flex items-center gap-3 group">
+          <svg viewBox="0 0 360 360" className="w-8 h-8" aria-hidden>
+            <g fill="var(--dot)" opacity="0.5">
+              <circle cx="110" cy="90" r="2"/><circle cx="188" cy="135" r="2"/>
+              <circle cx="178" cy="187" r="2"/><circle cx="273" cy="223" r="2.5"/>
+              <circle cx="198" cy="254" r="2"/><circle cx="236" cy="257" r="2"/>
+            </g>
+            <g fill="var(--accent)">
+              <circle cx="110" cy="90" r="4"/>
+              <circle cx="188" cy="135" r="4"/>
+              <circle cx="178" cy="187" r="4"/>
+              <circle cx="273" cy="223" r="5"/>
+              <circle cx="198" cy="254" r="4"/>
+              <circle cx="236" cy="257" r="4"/>
+            </g>
+          </svg>
           <span className="font-semibold tracking-tight font-mono text-sm">
             latam-jobs<span className="text-accent">.api</span>
             <span className="text-muted ml-2 text-xs">v0.1</span>
@@ -49,12 +63,23 @@ function TopBar() {
         </nav>
         <a
           href="#signup"
-          className="px-4 py-2 rounded-md border border-accent text-accent text-sm font-mono font-medium hover:bg-accent hover:text-background transition-colors"
+          className="px-4 py-2 border border-accent text-accent text-sm font-mono font-medium hover:bg-accent hover:text-background transition-colors"
         >
           &gt; sumate
         </a>
       </div>
     </header>
+  );
+}
+
+function BrandLockup() {
+  return (
+    <section className="border-y border-border bg-card/30 py-16">
+      <div className="max-w-3xl mx-auto px-6 flex flex-col items-center gap-6">
+        <p className="text-xs uppercase tracking-[0.14em] text-muted">// brand</p>
+        <LatamMapLogo size={280} animated={true} showText={false} />
+      </div>
+    </section>
   );
 }
 
@@ -79,8 +104,8 @@ function Hero() {
       <div className="max-w-6xl mx-auto px-6 pt-16 pb-12 lg:pt-24 lg:pb-20">
         <div className="grid lg:grid-cols-12 gap-10 items-start">
           <div className="lg:col-span-7 space-y-6">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-md border border-border bg-card text-xs text-muted font-mono">
-              <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 border border-border bg-card text-xs text-muted font-mono">
+              <span className="w-1.5 h-1.5 bg-accent animate-pulse" />
               <span className="text-accent">●</span>
               <span>validando_demanda // 30_signups_para_lanzar</span>
             </div>
@@ -108,13 +133,13 @@ listo para integrar.`}
             <div className="flex flex-wrap gap-3 pt-3 font-mono">
               <a
                 href="#demo"
-                className="px-5 py-2.5 rounded-md bg-accent text-background font-semibold hover:bg-accent-deep transition-colors text-sm"
+                className="px-5 py-2.5 bg-accent text-background font-semibold hover:bg-accent-deep transition-colors text-sm"
               >
                 $ probar_demo
               </a>
               <a
                 href="/docs"
-                className="px-5 py-2.5 rounded-md border border-border text-foreground hover:border-accent hover:text-accent transition-colors text-sm"
+                className="px-5 py-2.5 border border-border text-foreground hover:border-accent hover:text-accent transition-colors text-sm"
               >
                 /docs
               </a>
@@ -136,12 +161,12 @@ listo para integrar.`}
 
 function CodeBlock() {
   return (
-    <div className="rounded-lg border border-border bg-card overflow-hidden font-mono text-sm">
+    <div className=" border border-border bg-card overflow-hidden font-mono text-sm">
       <div className="flex items-center justify-between px-4 py-2 border-b border-border bg-card-hover/40">
         <div className="flex items-center gap-1.5">
-          <span className="w-2.5 h-2.5 rounded-full bg-danger" />
-          <span className="w-2.5 h-2.5 rounded-full bg-warning" />
-          <span className="w-2.5 h-2.5 rounded-full bg-accent" />
+          <span className="w-2.5 h-2.5 bg-danger" />
+          <span className="w-2.5 h-2.5 bg-warning" />
+          <span className="w-2.5 h-2.5 bg-accent" />
         </div>
         <span className="text-xs text-muted">/v1/search</span>
       </div>
@@ -200,7 +225,7 @@ function PainSection() {
       </div>
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
         {pains.map((p) => (
-          <article key={p.title} className="group rounded-lg border border-border bg-card p-5 hover:border-accent/40 transition-colors font-mono">
+          <article key={p.title} className="group border border-border bg-card p-5 hover:border-accent/40 transition-colors font-mono">
             <div className="text-xs text-muted mb-3">{p.n}</div>
             <h3 className="text-base font-semibold mb-2 group-hover:text-accent transition-colors">{p.title}</h3>
             <p className="text-xs text-muted leading-relaxed">{p.body}</p>
@@ -278,7 +303,7 @@ function ArchitectureSection() {
           <DecryptReveal>Cómo está construido.</DecryptReveal>
         </h2>
       </div>
-      <div className="rounded-lg border border-border bg-card p-6 lg:p-8">
+      <div className=" border border-border bg-card p-6 lg:p-8">
         <pre className="text-xs leading-relaxed overflow-x-auto">
           <code>
             <span className="text-muted">{`┌─────────────────────────────────────────────────────────────────────────┐`}</span>
@@ -326,7 +351,7 @@ function FeatureCard({
 }) {
   const colSpan = size === "large" ? "lg:col-span-6" : "lg:col-span-3";
   return (
-    <article className={`${colSpan} rounded-lg border border-border bg-card p-5 hover:border-accent/40 transition-colors flex flex-col gap-3`}>
+    <article className={`${colSpan} border border-border bg-card p-5 hover:border-accent/40 transition-colors flex flex-col gap-3`}>
       <div className="text-xs text-muted">// {kicker}</div>
       <h3 className="text-base font-semibold tracking-tight">{title}</h3>
       <p className="text-xs text-muted leading-relaxed">{body}</p>
@@ -348,7 +373,7 @@ function PortalsVisual() {
 
 function SalaryVisual() {
   return (
-    <div className="text-[11px] space-y-1 bg-background/50 rounded-md p-3 border border-border">
+    <div className="text-[11px] space-y-1 bg-background/50 p-3 border border-border">
       <div className="text-muted">&quot;25,000 - 35,000 MXN mensuales&quot;</div>
       <div className="text-accent">↓ parse</div>
       <div>
@@ -364,7 +389,7 @@ function SalaryVisual() {
 
 function WebhookVisual() {
   return (
-    <div className="text-[11px] bg-background/50 rounded-md p-3 border border-border space-y-1">
+    <div className="text-[11px] bg-background/50 p-3 border border-border space-y-1">
       <div className="text-muted">POST tu-endpoint/hook</div>
       <div className="text-accent">↓ webhook</div>
       <div>
@@ -379,7 +404,7 @@ function WebhookVisual() {
 
 function DedupVisual() {
   return (
-    <div className="text-[11px] bg-background/50 rounded-md p-3 border border-border space-y-1">
+    <div className="text-[11px] bg-background/50 p-3 border border-border space-y-1">
       <div className="text-muted">2 portales · misma oferta</div>
       <div className="flex gap-1.5 pt-1">
         <span className="px-1.5 py-0.5 rounded bg-accent/10 text-accent border border-accent/30">computrabajo</span>
@@ -393,7 +418,7 @@ function DedupVisual() {
 
 function McpVisual() {
   return (
-    <div className="text-[11px] bg-background/50 rounded-md p-3 border border-border space-y-1">
+    <div className="text-[11px] bg-background/50 p-3 border border-border space-y-1">
       <div className="text-muted">// openai tool schema</div>
       <div>
         <span className="text-foreground">{"{"} </span>
@@ -426,9 +451,9 @@ function PricingSection() {
       </div>
       <div className="grid md:grid-cols-3 gap-3">
         {tiers.map((tier) => (
-          <div key={tier.name} className={`rounded-lg p-6 flex flex-col gap-5 relative ${tier.highlighted ? "border-2 border-accent bg-card" : "border border-border bg-card"}`}>
+          <div key={tier.name} className={` p-6 flex flex-col gap-5 relative ${tier.highlighted ? "border-2 border-accent bg-card" : "border border-border bg-card"}`}>
             {tier.badge && (
-              <span className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-accent text-background text-[10px] font-semibold tracking-wider">{tier.badge}</span>
+              <span className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-accent text-background text-[10px] font-semibold tracking-wider">{tier.badge}</span>
             )}
             <div>
               <div className="text-xs text-muted uppercase tracking-wider mb-2">{tier.name}</div>
@@ -446,7 +471,7 @@ function PricingSection() {
                 </li>
               ))}
             </ul>
-            <a href="#signup" className={`px-4 py-2 rounded-md text-xs font-semibold text-center transition-colors ${tier.highlighted ? "bg-accent text-background hover:bg-accent-deep" : "border border-border text-foreground hover:border-accent hover:text-accent"}`}>
+            <a href="#signup" className={`px-4 py-2 text-xs font-semibold text-center transition-colors ${tier.highlighted ? "bg-accent text-background hover:bg-accent-deep" : "border border-border text-foreground hover:border-accent hover:text-accent"}`}>
               {tier.cta}
             </a>
           </div>
@@ -492,7 +517,7 @@ function FaqSection() {
 function CtaSection() {
   return (
     <section id="signup" className="max-w-3xl mx-auto px-6 py-20 font-mono">
-      <div className="rounded-lg border border-accent/30 bg-gradient-to-br from-card to-card-hover p-8 lg:p-12 text-center">
+      <div className=" border border-accent/30 bg-gradient-to-br from-card to-card-hover p-8 lg:p-12 text-center">
         <p className="text-xs text-accent uppercase tracking-wider mb-4">// 07 · call_to_action</p>
         <h2 className="text-3xl lg:text-4xl font-semibold tracking-tight mb-3">
           <DecryptReveal duration={1500}>Sumate a los 30 que validan esto.</DecryptReveal>

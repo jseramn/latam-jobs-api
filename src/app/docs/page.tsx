@@ -159,7 +159,7 @@ function DocSection({
 
 function Endpoint({ method, path }: { method: string; path: string }) {
   return (
-    <div className="flex items-center gap-3 px-3 py-2 rounded-md border border-border bg-card text-sm">
+    <div className="flex items-center gap-3 px-3 py-2 border border-border bg-card text-sm">
       <span className="px-2 py-0.5 rounded bg-accent/10 text-accent border border-accent/30 text-xs">
         {method}
       </span>
@@ -174,7 +174,7 @@ function ParamTable({
   rows: Array<{ name: string; type: string; required: boolean; desc: string }>;
 }) {
   return (
-    <div className="rounded-md border border-border overflow-hidden text-xs">
+    <div className=" border border-border overflow-hidden text-xs">
       <table className="w-full">
         <thead className="bg-card-hover/40">
           <tr className="text-left">
@@ -207,7 +207,7 @@ function ParamTable({
 
 function CodeLang({ lang, children }: { lang: string; children: string }) {
   return (
-    <div className="rounded-md border border-border bg-card overflow-hidden text-xs">
+    <div className=" border border-border bg-card overflow-hidden text-xs">
       <div className="px-3 py-1.5 bg-card-hover/40 text-muted text-[10px] uppercase tracking-wider border-b border-border">
         {lang}
       </div>
