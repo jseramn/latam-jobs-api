@@ -1,75 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48">
-  <!-- Stage frame: square border per Decrypt/Reveal aesthetic -->
-  <rect x="2" y="2" width="44" height="44" rx="0" ry="0"
-        fill="none" stroke="currentColor" stroke-width="1.5"/>
-  <!-- Dot field: Latin American hubs pattern from template.html -->
-  <g fill="currentColor">
-    <circle cx="8" cy="6" r="1.4"/>
-    <circle cx="11" cy="6" r="1.4"/>
-    <circle cx="14.5" cy="8.5" r="1.4"/>
-    <circle cx="17.5" cy="8.5" r="1.4"/>
-    <circle cx="20.5" cy="8.5" r="1.4"/>
-    <circle cx="14.5" cy="11.5" r="1.4"/>
-    <circle cx="17.5" cy="11.5" r="1.4"/>
-    <circle cx="20.5" cy="11.5" r="1.4"/>
-    <circle cx="23.5" cy="11.5" r="1.4"/>
-    <circle cx="17.5" cy="14.5" r="1.4"/>
-    <circle cx="20.5" cy="14.5" r="1.4"/>
-    <circle cx="23.5" cy="14.5" r="1.4"/>
-    <circle cx="26.5" cy="14.5" r="1.4"/>
-    <circle cx="20.5" cy="17.5" r="1.4"/>
-    <circle cx="23.5" cy="17.5" r="1.4"/>
-    <circle cx="26.5" cy="17.5" r="1.4"/>
-    <circle cx="29.5" cy="17.5" r="1.4"/>
-    <circle cx="14.5" cy="20.5" r="1.4"/>
-    <circle cx="17.5" cy="20.5" r="1.4"/>
-    <circle cx="20.5" cy="20.5" r="1.4"/>
-    <circle cx="23.5" cy="20.5" r="1.4"/>
-    <circle cx="26.5" cy="20.5" r="1.4"/>
-    <circle cx="29.5" cy="20.5" r="1.4"/>
-    <circle cx="32.5" cy="20.5" r="1.4"/>
-    <circle cx="14.5" cy="23.5" r="1.4"/>
-    <circle cx="17.5" cy="23.5" r="1.4"/>
-    <circle cx="20.5" cy="23.5" r="1.4"/>
-    <circle cx="23.5" cy="23.5" r="1.4"/>
-    <circle cx="26.5" cy="23.5" r="1.4"/>
-    <circle cx="29.5" cy="23.5" r="1.4"/>
-    <circle cx="32.5" cy="23.5" r="1.4"/>
-    <circle cx="35.5" cy="23.5" r="1.4"/>
-    <circle cx="17.5" cy="26.5" r="1.4"/>
-    <circle cx="20.5" cy="26.5" r="1.4"/>
-    <circle cx="23.5" cy="26.5" r="1.4"/>
-    <circle cx="26.5" cy="26.5" r="1.4"/>
-    <circle cx="29.5" cy="26.5" r="1.4"/>
-    <circle cx="32.5" cy="26.5" r="1.4"/>
-    <circle cx="35.5" cy="26.5" r="1.4"/>
-    <circle cx="17.5" cy="29.5" r="1.4"/>
-    <circle cx="20.5" cy="29.5" r="1.4"/>
-    <circle cx="23.5" cy="29.5" r="1.4"/>
-    <circle cx="26.5" cy="29.5" r="1.4"/>
-    <circle cx="29.5" cy="29.5" r="1.4"/>
-    <circle cx="32.5" cy="29.5" r="1.4"/>
-    <circle cx="35.5" cy="29.5" r="1.4"/>
-    <circle cx="20.5" cy="32.5" r="1.4"/>
-    <circle cx="23.5" cy="32.5" r="1.4"/>
-    <circle cx="26.5" cy="32.5" r="1.4"/>
-    <circle cx="29.5" cy="32.5" r="1.4"/>
-    <circle cx="32.5" cy="32.5" r="1.4"/>
-    <circle cx="20.5" cy="35.5" r="1.4"/>
-    <circle cx="23.5" cy="35.5" r="1.4"/>
-    <circle cx="26.5" cy="35.5" r="1.4"/>
-    <circle cx="23.5" cy="38.5" r="1.4"/>
-    <circle cx="26.5" cy="38.5" r="1.4"/>
+  <rect x="2" y="2" width="44" height="44" fill="none" stroke="#ffffff" stroke-width="1"/>
+  <g fill="#ffffff">
+    <!-- Silueta LATAM minimalista -->
+    <rect x="10" y="10" width="2.5" height="2.5"/>  <!-- México -->
+    <rect x="20" y="18" width="2.5" height="2.5"/>  <!-- Colombia -->
+    <rect x="30" y="22" width="3" height="3"/>      <!-- Brasil (acento, más grande) -->
+    <rect x="22" y="30" width="2.5" height="2.5"/>  <!-- Argentina -->
+    <rect x="14" y="32" width="2" height="2"/>      <!-- Chile -->
   </g>
-  <!-- Tracks (hub connections) -->
-  <g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" opacity="0.4">
-    <path d="M 8 6 L 17.5 14.5 L 23.5 23.5 L 32.5 32.5"/>
-    <path d="M 35.5 23.5 L 26.5 29.5"/>
-    <path d="M 23.5 23.5 L 29.5 29.5"/>
-  </g>
-  <!-- Animated packet traveling the network -->
-  <circle cx="0" cy="0" r="2" fill="currentColor" stroke="none">
-    <animateMotion dur="6s" repeatCount="indefinite"
-      path="M 8 6 L 17.5 14.5 L 23.5 23.5 L 32.5 32.5"/>
-  </circle>
+  <!-- Hub central vacío para conectar visualmente -->
+  <rect x="23" y="23" width="2" height="2" fill="#000000"/>
 </svg>

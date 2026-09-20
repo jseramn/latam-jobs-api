@@ -1,19 +1,27 @@
 @import "tailwindcss";
 
+/* PALETA: blanco y negro puros. Solo opacidades para jerarquías. */
 :root {
-  --background: #0a0a0c;
-  --foreground: #e8e9ed;
-  --muted: #8b93a1;
-  --accent: #5eead4;
-  --accent-deep: #14b8a6;
-  --border: #1c1f27;
-  --card: #11131a;
-  --card-hover: #161922;
-  --surface: #11131a;
-  --dot: #5eead4;
-  --track: #5eead4;
-  --danger: #f87171;
-  --warning: #fbbf24;
+  --background: #000000;
+  --foreground: #ffffff;
+  --muted: #ffffff;
+  --accent: #ffffff;
+  --border: #ffffff;
+  --border-faint: #ffffff;
+  --card: #000000;
+  --card-hover: #0a0a0a;
+  --surface: #000000;
+
+  /* opacidades semánticas, sin hex intermedios */
+  --o-fg: 1;          /* foreground completo */
+  --o-muted: 0.55;    /* texto secundario */
+  --o-faint: 0.30;    /* texto desactivado */
+  --o-border: 0.12;   /* bordes sutiles */
+  --o-border-strong: 0.35; /* bordes visibles */
+  --o-accent: 1;      /* blanco puro en hover */
+
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
 }
 
 @theme inline {
@@ -21,34 +29,23 @@
   --color-foreground: var(--foreground);
   --color-muted: var(--muted);
   --color-accent: var(--accent);
-  --color-accent-deep: var(--accent-deep);
   --color-border: var(--border);
   --color-card: var(--card);
   --color-card-hover: var(--card-hover);
   --color-surface: var(--surface);
-  --color-dot: var(--dot);
-  --color-track: var(--track);
-  --color-danger: var(--danger);
-  --color-warning: var(--warning);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
 }
 
 * {
   box-sizing: border-box;
 }
 
-/* SEAL FRAME — every container has a 1px square border per template.html */
-html,
-body,
-h1, h2, h3, h4, h5, h6,
-p, span, a, code, pre, kbd,
-button, input, select, textarea,
-blockquote, aside, figure, figcaption,
-li, dt, dd,
-form, fieldset, legend,
-table, thead, tbody, tr, th, td,
-progress, meter {
+/* Reset absoluto: cero border-radius en cualquier elemento */
+html, body, h1, h2, h3, h4, h5, h6, p, span, a, code, pre, kbd,
+button, input, select, textarea, blockquote, aside, figure, figcaption,
+li, dt, dd, form, fieldset, legend, table, thead, tbody, tr, th, td,
+progress, meter, article, section, div, header, footer, nav, main, aside {
   margin: 0;
   padding: 0;
   border: 0;
@@ -56,10 +53,10 @@ progress, meter {
   text-decoration: none;
   background: transparent;
   outline: none;
+  border-radius: 0;
 }
 
-html,
-body {
+html, body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
@@ -67,113 +64,82 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Tight grid whitespace from template.html lockup */
 body {
   padding: 28px 20px;
   line-height: 1.55;
   letter-spacing: 0.01em;
 }
 
+/* Todos los textos: blanco o blanco con opacidad */
+.foreground { color: rgba(255, 255, 255, var(--o-fg)); }
+.muted { color: rgba(255, 255, 255, var(--o-muted)); }
+.faint { color: rgba(255, 255, 255, var(--o-faint)); }
+.border-faint { border-color: rgba(255, 255, 255, var(--o-border)); }
+.border-strong { border-color: rgba(255, 255, 255, var(--o-border-strong)); }
+
 ::selection {
-  background: var(--accent);
-  color: var(--background);
+  background: #ffffff;
+  color: #000000;
 }
 
-/* Square scrollbar / chrome — no rounded corner radii on chrome elements */
+/* Scrollbar blanco/negro */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--background);
+  background: #000000;
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--border);
-  border-radius: 0px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 0;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--muted);
-  border-radius: 0px;
+  background: rgba(255, 255, 255, 0.35);
 }
 
 @keyframes packet-travel {
-  to {
-    offset-distance: 100%;
-  }
+  to { offset-distance: 100%; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   *[style*="offset-path"],
-  *[style*="offset-distance"] {
-    animation: none !important;
-  }
-
+  *[style*="offset-distance"],
   html body *,
   html body *::before,
   html body *::after {
-    animation-duration: 0.001ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.001ms !important;
+    animation: none !important;
+    transition: none !important;
   }
 }
 
 @keyframes pulse-soft {
   0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
+  50% { opacity: 0.4; }
 }
 
-@keyframes fade-up {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* ASCII GRADIENT: capa que renderiza un degradado con chars en lugar de CSS.
+   Usar en una sección da el efecto "degradado semi ascii" de usecroma. */
+.ascii-gradient {
+  position: relative;
+  background: #000;
+}
+.ascii-gradient::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(to right,
+      transparent 0%,
+      rgba(255,255,255,0.04) 30%,
+      rgba(255,255,255,0.10) 60%,
+      rgba(255,255,255,0.04) 100%);
+  z-index: 0;
 }
 
-.animate-fade-up {
-  animation: fade-up 0.6s ease-out both;
-}
-
-/* Terminal type blocks — recursive UNIX-cmd-friendly */
-.kbd {
-  font-family: var(--font-mono);
-  font-size: 0.85em;
-  padding: 0.1em 0.4em;
-  border: 1px solid var(--border);
-  border-radius: 0px;
-  background: var(--card);
-  color: var(--muted);
-}
-
-.code-block {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 0px;
-  padding: 1rem;
-  overflow: auto;
-  font-family: var(--font-mono);
-  font-size: 0.875rem;
-  line-height: 1.5;
-  color: var(--foreground);
-}
-
-.code-block pre,
-.code-block code {
-  font-family: inherit;
-}
-
-/* Terminal-styled links */
-a,
-.link {
-  color: var(--accent);
-  border-bottom: 1px solid var(--border);
-}
-
-a:hover,
-.link:hover {
-  background: var(--border);
-  border-bottom-style: solid;
+/* Dot field: gradiente ASCII puro de puntitos blancos */
+.dot-field {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.18) 1px, transparent 1px);
+  background-size: 14px 14px;
 }

@@ -118,15 +118,15 @@ export function LiveDemo() {
     <div className=" border border-border bg-card overflow-hidden">
       <div className="border-b border-border bg-card-hover/40 px-5 py-3 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <span className="w-2 h-2 bg-danger" />
-          <span className="w-2 h-2 bg-warning" />
-          <span className="w-2 h-2 bg-accent" />
-          <span className="ml-3 text-xs text-muted font-mono">
+          <span className="w-2 h-2 border border-foreground/30" />
+          <span className="w-2 h-2 border border-foreground/30" />
+          <span className="w-2 h-2 border border-foreground/30" />
+          <span className="ml-3 text-xs text-muted">
             api.latam-jobs.dev/v1/search
           </span>
         </div>
         {preview && (
-          <span className="text-xs text-warning font-mono">SAMPLE</span>
+          <span className="text-xs text-muted uppercase tracking-wider">SAMPLE</span>
         )}
       </div>
 
@@ -163,7 +163,7 @@ export function LiveDemo() {
 
       <div className="divide-y divide-border max-h-[420px] overflow-y-auto">
         {error && (
-          <div className="px-5 py-8 text-center text-sm text-danger">{error}</div>
+          <div className="px-5 py-8 text-center text-sm text-muted">{error}</div>
         )}
         {!error && results.length === 0 && !loading && (
           <div className="px-5 py-8 text-center text-sm text-muted">
