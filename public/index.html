@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>LatamJobs API — Una llamada, todas las bolsas de trabajo de LATAM</title>
+<meta name="description" content="API unificada para buscar empleos en Computrabajo, Bumeran, OCC, ZonaJobs, Laborum y ElEmpleo en una sola llamada. JSON limpio, deduplicado, salary parseado. Diseñado para recruiters y HR tech en LATAM." />
+<style>
+:root {
+  --bg: #0b0d12;
+  --fg: #e6e9ef;
+  --muted: #8b93a1;
+  --accent: #5eead4;
+  --card: #141821;
+  --border: #232938;
+  --danger: #f87171;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial;
+  background: var(--bg);
+  color: var(--fg);
+  line-height: 1.55;
+}
+.wrap { max-width: 880px; margin: 0 auto; padding: 48px 20px; }
+.hero { padding: 64px 0 24px; }
+.kicker {
+  display: inline-block;
+  padding: 4px 10px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+h1 {
+  font-size: clamp(32px, 5vw, 52px);
+  line-height: 1.08;
+  margin: 16px 0 12px;
+  letter-spacing: -0.02em;
+}
+h1 .accent { color: var(--accent); }
+.lead {
+  font-size: 18px;
+  color: var(--muted);
+  max-width: 640px;
+  margin: 0 0 32px;
+}
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 12px;
+  margin: 32px 0;
+}
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+}
+.card .name { font-weight: 600; font-size: 14px; color: var(--accent); }
+.card .meta { font-size: 13px; color: var(--muted); margin-top: 4px; }
+.cta {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 24px;
+  margin: 32px 0;
+}
+.cta h2 { margin: 0 0 4px; font-size: 22px; }
+.cta p { margin: 0 0 16px; color: var(--muted); font-size: 14px; }
+form { display: flex; flex-wrap: wrap; gap: 8px; }
+input, select, button {
+  font-family: inherit;
+  font-size: 15px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: #0f1218;
+  color: var(--fg);
+}
+input[type=email] { flex: 1; min-width: 220px; }
+button {
+  background: var(--accent);
+  color: #0b0d12;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 10px 18px;
+}
+button:hover { opacity: 0.9; }
+button:disabled { opacity: 0.5; cursor: not-allowed; }
+.proof {
+  margin-top: 12px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.proof strong { color: var(--fg); }
+.bar {
+  height: 6px;
+  background: #1c2230;
+  border-radius: 3px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+.bar > span {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+  width: 0;
+  transition: width 0.5s;
+}
+.note { color: var(--danger); font-size: 13px; margin-top: 8px; min-height: 18px; }
+.fine { font-size: 12px; color: var(--muted); margin-top: 8px; }
+pre {
+  background: #0f1218;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px;
+  overflow-x: auto;
+  font-size: 13px;
+  line-height: 1.5;
+}
+code { color: var(--accent); }
+footer {
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+  font-size: 13px;
+  color: var(--muted);
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <section class="hero">
+    <span class="kicker">Beta · Q4 2026</span>
+    <h1>Una sola llamada. <span class="accent">Todas las bolsas de trabajo de LATAM.</span></h1>
+    <p class="lead">
+      API REST que une <strong>Computrabajo, Bumeran, OCC, ZonaJobs, Laborum y ElEmpleo</strong> en un único endpoint. JSON limpio, deduplicado, con salary parseado a número y moneda. Hecho para recruiters, agencias de staffing y HR tech que hoy corren 5 scrapers y unen excels a mano.
+    </p>
+  </section>
+
+  <section class="cards">
+    <div class="card">
+      <div class="name">Una llamada, 6 portales</div>
+      <div class="meta">México, Colombia, Argentina, Chile, Perú, Uruguay, Bolivia, Ecuador. Más países cada mes.</div>
+    </div>
+    <div class="card">
+      <div class="name">Salary como número</div>
+      <div class="meta">"MXN 25,000 - 35,000 mensuales" → <code>min: 25000, max: 35000, currency: "MXN", period: "monthly"</code></div>
+    </div>
+    <div class="card">
+      <div class="name">Dedup por hash</div>
+      <div class="meta">Si Computrabajo y Bumeran cargan la misma oferta, recibís 1 fila con <code>source: ["computrabajo","bumeran"]</code>.</div>
+    </div>
+    <div class="card">
+      <div class="name">Webhooks de cambios</div>
+      <div class="meta">Monitoreá keywords y recibí POST cuando aparece una nueva oferta. Igual que un Slack alert, pero en JSON.</div>
+    </div>
+  </section>
+
+  <pre><code>GET https://api.latam-jobs.dev/v1/search
+   ?q=desarrollador+python
+   &amp;country=mx,co,ar
+   &amp;salary_min=20000
+
+→ 200 OK
+{
+  "results": [
+    {
+      "id": "abc123",
+      "title": "Backend Developer Python",
+      "company": "Mercado Libre",
+      "location": "Ciudad de México, MX",
+      "salary": { "min": 45000, "max": 70000, "currency": "MXN", "period": "monthly" },
+      "posted_at": "2026-09-19T14:22:00Z",
+      "sources": ["computrabajo", "bumeran"],
+      "url": "https://..."
+    }
+  ],
+  "meta": { "total": 1247, "fetched_ms": 3120 }
+}</code></pre>
+
+  <section class="cta" id="cta">
+    <h2>Sumate a la lista de early access</h2>
+    <p>Si sos recruiter LATAM o construís HR tech, dejanos tu email. Lanzamos con 30 empresas piloto y precio de founding ($49/mes el primer año, después $99).</p>
+    <form id="f">
+      <input type="email" name="email" placeholder="tu@empresa.com" required />
+      <select name="role" required>
+        <option value="">Soy...</option>
+        <option value="recruiter">Recruiter / Talent acquisition</option>
+        <option value="agency">Dueño de agencia de staffing</option>
+        <option value="hrtech">Construyo HR tech / SaaS</option>
+        <option value="developer">Developer integrando</option>
+        <option value="other">Otro</option>
+      </select>
+      <select name="country" required>
+        <option value="">País...</option>
+        <option value="MX">México</option>
+        <option value="CO">Colombia</option>
+        <option value="AR">Argentina</option>
+        <option value="CL">Chile</option>
+        <option value="PE">Perú</option>
+        <option value="UY">Uruguay</option>
+        <option value="OTHER">Otro LATAM</option>
+      </select>
+      <button type="submit">Quiero acceso</button>
+    </form>
+    <div class="note" id="note"></div>
+    <div class="proof">
+      <strong id="count">0</strong> de <strong>30</strong> recruiters ya se sumaron para validar el lanzamiento.
+      <div class="bar"><span id="bar"></span></div>
+    </div>
+    <div class="fine">Si llegamos a 30 en 48h, abrimos la API. Si no, te avisamos qué encontramos.</div>
+  </section>
+
+  <footer>
+    <span>latam-jobs-api · construido por un agente autónomo en Bogotá 🇨🇴</span>
+    <span>¿Pregunta? hola@latam-jobs.dev</span>
+  </footer>
+</div>
+
+<script>
+const $ = (s) => document.querySelector(s);
+async function loadStats() {
+  try {
+    const r = await fetch("/api/stats");
+    const s = await r.json();
+    $("#count").textContent = s.signups;
+    $("#bar").style.width = s.percent + "%";
+  } catch (e) {
+    console.warn(e);
+  }
+}
+loadStats();
+$("#f").addEventListener("submit", async (ev) => {
+  ev.preventDefault();
+  const note = $("#note");
+  const btn = ev.target.querySelector("button");
+  note.textContent = "";
+  btn.disabled = true;
+  const data = Object.fromEntries(new FormData(ev.target));
+  try {
+    const r = await fetch("/api/signup", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(data),
+    });
+    const j = await r.json();
+    if (!r.ok) {
+      note.textContent = j.error === "invalid_email" ? "Email inválido." : "Algo falló, probá de nuevo.";
+      btn.disabled = false;
+      return;
+    }
+    note.textContent = "¡Listo! Te avisamos cuando abramos early access.";
+    ev.target.reset();
+    loadStats();
+    setTimeout(() => { btn.disabled = false; }, 2000);
+  } catch (e) {
+    note.textContent = "Error de red: " + e.message;
+    btn.disabled = false;
+  }
+});
+</script>
+</body>
+</html>
