@@ -184,7 +184,7 @@ export function LiveDemo() {
                   {job.company} · {job.location}
                 </p>
               </div>
-              <span className="text-xs font-mono text-accent shrink-0 px-2 py-1 rounded bg-accent/10">
+              <span className="text-xs font-mono text-accent shrink-0 px-2 py-1 rounded-none bg-accent/10">
                 {job.source}
               </span>
             </div>

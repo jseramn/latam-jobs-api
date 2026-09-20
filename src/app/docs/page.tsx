@@ -160,7 +160,7 @@ function DocSection({
 function Endpoint({ method, path }: { method: string; path: string }) {
   return (
     <div className="flex items-center gap-3 px-3 py-2 border border-border bg-card text-sm">
-      <span className="px-2 py-0.5 rounded bg-accent/10 text-accent border border-accent/30 text-xs">
+      <span className="px-2 py-0.5 rounded-none bg-accent/10 text-accent border border-accent/30 text-xs">
         {method}
       </span>
       <code className="text-foreground">{path}</code>

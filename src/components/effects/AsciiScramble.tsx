@@ -12,66 +12,106 @@ interface AsciiScrambleProps {
   loopDelay?: number;
 }
 
-const CHARS = "▓▒░█▄▀■□◇◈◉●◐◑◒◓╔╗╚╝║═╬╠╣╦╩├┤┬┴┼━┃┏┓┗┛<>/\\|-+*#@$%&";
+// Más chars visuales para el efecto terminal/ficiente
+const CHARS =
+  "░▒▓█▀▄╔╗╚╝║═╠╣┃┏┓┗┛┠╂┯┰┱┲┳┤┥┦┧┨┩┪┫┬┭┮┯┰┱┲┳┴┵┶┷┸┹┺┻┼┽┾┿╀╁╃╄╅╆╇╈╉╊╋╍╎╏┿╹╺╻╼╽╾╿";
 
 export function AsciiScramble({
   text,
   className = "",
-  duration = 1200,
+  duration = 450,
   scrambleChars = CHARS,
   trigger = "mount",
   loop = false,
-  loopDelay = 3000,
+  loopDelay = 1000,
 }: AsciiScrambleProps) {
   const [display, setDisplay] = useState(
     trigger === "mount" ? text : text.replace(/./g, () => pick(scrambleChars)),
   );
   const [running, setRunning] = useState(trigger === "mount");
   const ref = useRef<HTMLElement>(null);
+  const rafRef = useRef<number | null>(null);
 
   function pick(charset: string): string {
     return charset[Math.floor(Math.random() * charset.length)];
   }
 
+  // Scrambled initial state for non-mount triggers
+  function scrambleText(t: string): string {
+    return t.replace(/./g, (ch) => (ch === " " ? " " : pick(scrambleChars)));
+  }
+
   function run() {
+    if (rafRef.current) cancelAnimationFrame(rafRef.current);
     setRunning(true);
-    const start = Date.now();
-    const total = duration;
-    const interval = setInterval(() => {
-      const elapsed = Date.now() - start;
-      const progress = Math.min(elapsed / total, 1);
-      const revealed = Math.floor(progress * text.length);
-      setDisplay(
-        text
-          .split("")
-          .map((ch, i) =>
-            i < revealed
-              ? ch
-              : ch === " "
-              ? " "
-              : pick(scrambleChars),
-          )
-          .join(""),
-      );
-      if (progress >= 1) {
-        clearInterval(interval);
-        setDisplay(text);
-        setRunning(false);
-        if (loop) {
-          setTimeout(() => {
-            setDisplay(text.replace(/./g, () => pick(scrambleChars)));
-            run();
-          }, loopDelay);
+    setDisplay(scrambleText(text));
+
+    const start = performance.now();
+    const total = Math.max(80, duration);
+    const step = 14; // ~70fps de actualización del texto
+
+    let lastTick = start;
+    let frame: number;
+
+    function tick(now: number) {
+      if (now - lastTick >= step) {
+        lastTick = now;
+        const elapsed = now - start;
+        const progress = Math.min(elapsed / total, 1);
+        const revealed = Math.floor(progress * text.length);
+
+        setDisplay(
+          text
+            .split("")
+            .map((ch, i) =>
+              i < revealed ? ch : ch === " " ? " " : pick(scrambleChars),
+            )
+            .join(""),
+        );
+
+        if (progress >= 1) {
+          // Un frame más de scrambling aleatorio para tail effect
+          setDisplay(
+            text
+              .split("")
+              .map((ch, i) =>
+                i < text.length ? ch : pick(scrambleChars),
+              )
+              .join(""),
+          );
+          rafRef.current = requestAnimationFrame(() => {
+            setDisplay(text);
+            setRunning(false);
+            rafRef.current = null;
+            if (loop) {
+              setTimeout(() => {
+                setDisplay(scrambleText(text));
+                run();
+              }, loopDelay);
+            }
+          });
+          return;
         }
       }
-    }, 32);
+      rafRef.current = requestAnimationFrame(tick);
+    }
+
+    rafRef.current = requestAnimationFrame(tick);
   }
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    };
+  }, []);
 
   useEffect(() => {
     if (trigger === "mount") {
-      run();
+      // Small delay to avoid flash on SSR/first paint
+      const t = setTimeout(run, 30);
+      return () => clearTimeout(t);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -84,11 +124,10 @@ export function AsciiScramble({
           run();
         }
       },
-      { threshold: 0.3 },
+      { threshold: 0.2 },
     );
     observer.observe(el);
     return () => observer.disconnect();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [trigger, running]);
 
   const onMouseEnter = () => {
