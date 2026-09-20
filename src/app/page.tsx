@@ -3,7 +3,6 @@ import { SignupForm } from "@/components/landing/SignupForm";
 import { SignupCounter } from "@/components/landing/SignupCounter";
 import { LiveDemo } from "@/components/landing/LiveDemo";
 import { AsciiScramble } from "@/components/effects/AsciiScramble";
-import { AsciiSweep } from "@/components/effects/AsciiSweep";
 import { DecryptReveal } from "@/components/effects/DecryptReveal";
 
 export default function Home() {
@@ -12,10 +11,8 @@ export default function Home() {
       <TopBar />
       <main className="font-mono">
         <Hero />
-        <AsciiSweep height={64} />
         <PainSection />
         <DemoSection />
-        <AsciiSweep height={48} />
         <FeaturesSection />
         <ArchitectureSection />
         <PricingSection />
@@ -29,7 +26,7 @@ export default function Home() {
 
 function TopBar() {
   return (
-    <header className="sticky top-0 z-40 border-b border-border bg-background/85 backdrop-blur-md">
+    <header className="sticky top-0 z-40 bg-background/85 backdrop-blur-md">
       <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-3 group">
           <svg viewBox="0 0 48 48" className="w-7 h-7 shrink-0" aria-hidden>
@@ -46,7 +43,7 @@ function TopBar() {
           <span className="font-semibold tracking-tight text-sm leading-none">
             latam-jobs<span className="text-accent">.api</span>
           </span>
-          <span className="hidden sm:inline-flex items-center text-[10px] text-muted/60 ml-2 pl-2 border-l border-border/60 leading-none">
+          <span className="hidden sm:inline-flex items-center text-[10px] text-muted/60 ml-2 pl-2 border-l">
             v0.1
           </span>
         </Link>
@@ -71,7 +68,7 @@ function TopBar() {
 
 function Hero() {
   return (
-    <section className="relative overflow-hidden border-b border-border">
+    <section className="relative overflow-hidden">
       <div
         className="absolute inset-0 -z-10 opacity-40"
         style={{
@@ -129,7 +126,7 @@ listo para integrar.`}
               </a>
               <a
                 href="/docs"
-                className="px-5 py-2.5 border border-border text-foreground hover:border-accent hover:text-accent transition-colors text-sm"
+                className="px-5 py-2.5 border"
               >
                 /docs
               </a>
@@ -151,8 +148,8 @@ listo para integrar.`}
 
 function CodeBlock() {
   return (
-    <div className="border border-border bg-card overflow-hidden text-sm">
-      <div className="flex items-center justify-between px-4 py-2 border-b border-border bg-card-hover/40">
+    <div className="border">
+      <div className="flex items-center justify-between px-4 py-2 bg-card-hover/40">
         <div className="flex items-center gap-1.5">
           <span className="w-2.5 h-2.5 border border-foreground/30" />
           <span className="w-2.5 h-2.5 border border-foreground/30" />
@@ -203,11 +200,11 @@ function PainSection() {
   ];
 
   return (
-    <section className="max-w-6xl mx-auto px-6 py-20 border-b border-border">
+    <section className="max-w-6xl mx-auto px-6 py-20">
       <div className="mb-10">
         <div className="mb-3 flex items-baseline gap-3">
           <span className="text-2xl text-accent font-semibold leading-none">01</span>
-          <span className="text-[11px] uppercase tracking-wider text-muted">"El problema"</span>
+          <span>El problema</span>
         </div>
         <h2 className="text-2xl lg:text-3xl font-semibold tracking-tight max-w-2xl">
           <DecryptReveal duration={500} delay={100}>
@@ -219,7 +216,7 @@ function PainSection() {
         {pains.map((p) => (
           <article
             key={p.n}
-            className="group border border-border bg-card p-5 hover:border-accent/40 transition-colors"
+            className="group border"
           >
             <div className="text-[11px] text-muted mb-3">{`// ${p.n}`}</div>
             <h3 className="text-[15px] font-semibold mb-2 group-hover:text-accent transition-colors">
@@ -235,12 +232,12 @@ function PainSection() {
 
 function DemoSection() {
   return (
-    <section id="demo" className="max-w-6xl mx-auto px-6 py-20 border-b border-border">
+    <section id="demo" className="max-w-6xl mx-auto px-6 py-20">
       <div className="grid lg:grid-cols-12 gap-10 items-start">
         <div className="lg:col-span-4 space-y-4">
           <div className="flex items-baseline gap-3 mb-1">
             <span className="text-2xl text-accent font-semibold leading-none">02</span>
-            <span className="text-[11px] uppercase tracking-wider text-muted">Demo en vivo</span>
+            <span className="text-sm text-muted">Demo en vivo</span>
           </div>
           <h2 className="text-2xl lg:text-3xl font-semibold tracking-tight">
             <DecryptReveal duration={500}>{"Probalo ahora."}</DecryptReveal>
@@ -280,11 +277,11 @@ disponibles; mientras tanto, datos de muestra con el schema final.`}
 
 function FeaturesSection() {
   return (
-    <section id="features" className="max-w-6xl mx-auto px-6 py-20 border-b border-border">
+    <section id="features" className="max-w-6xl mx-auto px-6 py-20">
       <div className="mb-10">
         <div className="mb-3 flex items-baseline gap-3">
           <span className="text-2xl text-accent font-semibold leading-none">03</span>
-          <span className="text-[11px] uppercase tracking-wider text-muted">"Por qué"</span>
+          <span>Por qué</span>
         </div>
         <h2 className="text-2xl lg:text-3xl font-semibold tracking-tight max-w-2xl">
           <DecryptReveal duration={500} delay={100}>
@@ -362,7 +359,7 @@ function FeatureCard({
   visual: React.ReactNode;
 }) {
   return (
-    <article className="group border border-border bg-card p-5 hover:border-accent/40 transition-colors flex flex-col gap-3 h-full">
+    <article className="group border">
       <div className="text-[11px] text-muted">{`// ${n}`}</div>
       <h3 className="text-[15px] font-semibold tracking-tight group-hover:text-accent transition-colors">
         {title}
@@ -466,10 +463,10 @@ function OpenAiVisual() {
 
 function ArchitectureSection() {
   return (
-    <section className="max-w-6xl mx-auto px-6 py-20 border-b border-border">
+    <section className="max-w-6xl mx-auto px-6 py-20">
       <div className="mb-3 flex items-baseline gap-3">
         <span className="text-2xl text-accent font-semibold leading-none">04</span>
-        <span className="text-[11px] uppercase tracking-wider text-muted">Cómo funciona</span>
+        <span className="text-sm text-muted">Cómo funciona</span>
       </div>
       <h2 className="text-2xl lg:text-3xl font-semibold tracking-tight mb-10">
         <DecryptReveal duration={500} delay={100}>
@@ -487,7 +484,7 @@ function ArchitectureSection() {
 
 function StepCard({ n, title, body }: { n: string; title: string; body: string }) {
   return (
-    <article className="border border-border bg-card p-6 flex flex-col gap-3">
+    <article className="border">
       <div className="text-[11px] text-muted">{`// paso ${n}`}</div>
       <h3 className="text-xl font-semibold tracking-tight">{title}</h3>
       <p className="text-sm text-muted leading-relaxed">{body}</p>
@@ -537,11 +534,11 @@ function PricingSection() {
   ];
 
   return (
-    <section id="pricing" className="max-w-6xl mx-auto px-6 py-20 border-b border-border">
+    <section id="pricing" className="max-w-6xl mx-auto px-6 py-20">
       <div className="mb-12 max-w-2xl">
         <div className="mb-3 flex items-baseline gap-3">
           <span className="text-2xl text-accent font-semibold leading-none">05</span>
-          <span className="text-[11px] uppercase tracking-wider text-muted">"Pricing"</span>
+          <span>Pricing</span>
         </div>
         <h2 className="text-2xl lg:text-3xl font-semibold tracking-tight mb-3">
           <DecryptReveal duration={500}>{"Pricing simple, en USD."}</DecryptReveal>
@@ -557,7 +554,7 @@ function PricingSection() {
             className={`p-6 flex flex-col gap-5 relative ${
               t.highlighted
                 ? "border-2 border-accent bg-card"
-                : "border border-border bg-card"
+                : "border"
             }`}
           >
             {t.badge && (
@@ -588,7 +585,7 @@ function PricingSection() {
               className={`px-4 py-2 text-xs font-semibold text-center transition-colors ${
                 t.highlighted
                   ? "bg-accent text-background hover:bg-accent-deep"
-                  : "border border-border text-foreground hover:border-accent hover:text-accent"
+                  : "border"
               }`}
             >
               {t.cta}
@@ -626,15 +623,15 @@ function FaqSection() {
   ];
 
   return (
-    <section id="faq" className="max-w-3xl mx-auto px-6 py-20 border-b border-border">
+    <section id="faq" className="max-w-3xl mx-auto px-6 py-20">
       <div className="mb-3 flex items-baseline gap-3">
         <span className="text-2xl text-accent font-semibold leading-none">06</span>
-        <span className="text-[11px] uppercase tracking-wider text-muted">"Preguntas frecuentes"</span>
+        <span>Preguntas frecuentes</span>
       </div>
       <h2 className="text-2xl lg:text-3xl font-semibold tracking-tight mb-10">
         <DecryptReveal duration={500}>{"Preguntas reales de recruiters LATAM."}</DecryptReveal>
       </h2>
-      <div className="divide-y divide-border border-y border-border">
+      <div className="divide-y divide-border border-y">
         {faqs.map((f, i) => (
           <details key={f.q} className="group py-5 cursor-pointer" open={i === 0}>
             <summary className="flex items-start justify-between gap-4 list-none">
@@ -660,7 +657,7 @@ function CtaSection() {
       <div className="border border-accent/30 bg-card p-8 lg:p-12 text-center">
         <div className="mb-4 flex items-baseline gap-3 justify-center">
           <span className="text-2xl text-accent font-semibold leading-none">07</span>
-          <span className="text-[11px] uppercase tracking-wider text-muted">"Sumate"</span>
+          <span>Sumate</span>
         </div>
         <h2 className="text-2xl lg:text-3xl font-semibold tracking-tight mb-3">
           <DecryptReveal duration={500}>{"Sumate a los 30 que validan esto."}</DecryptReveal>
@@ -678,7 +675,7 @@ function CtaSection() {
 
 function Footer() {
   return (
-    <footer className="border-t border-border">
+    <footer className="border-t">
       <div className="max-w-6xl mx-auto px-6 py-10 flex flex-wrap items-center justify-between gap-4 text-xs text-muted">
         <div className="flex items-center gap-2">
           <svg viewBox="0 0 48 48" className="w-5 h-5 shrink-0" aria-hidden>
