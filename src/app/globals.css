@@ -1,145 +1,527 @@
 @import "tailwindcss";
 
-/* PALETA: blanco y negro puros. Solo opacidades para jerarquías. */
-:root {
-  --background: #000000;
-  --foreground: #ffffff;
-  --muted: #ffffff;
-  --accent: #ffffff;
-  --border: #ffffff;
-  --border-faint: #ffffff;
-  --card: #000000;
-  --card-hover: #0a0a0a;
-  --surface: #000000;
+/* ================================================================
+   VERCEL DESIGN SYSTEM — strict clone
+   (white canvas, Geist, shadow-as-border, workflow accents)
+   ================================================================ */
 
-  /* opacidades semánticas, sin hex intermedios */
-  --o-fg: 1;          /* foreground completo */
-  --o-muted: 0.55;    /* texto secundario */
-  --o-faint: 0.30;    /* texto desactivado */
-  --o-border: 0.12;   /* bordes sutiles */
-  --o-border-strong: 0.35; /* bordes visibles */
-  --o-accent: 1;      /* blanco puro en hover */
+:root {
+  --color-bg: #ffffff;
+  --color-fg: #171717;
+  --color-fg-muted: #4d4d4d;
+  --color-fg-subtle: #666666;
+  --color-fg-faint: #808080;
+  --color-border: #ebebeb;
+  --color-surface: #fafafa;
+
+  --ring-subtle: rgba(0,0,0,0.08);
+  --ring-standard: rgba(0,0,0,0.12);
+  --ring-strong: rgba(0,0,0,0.20);
+
+  --ship: #ff5b4f;
+  --preview: #de1d8d;
+  --develop: #0a72ef;
+  --link: #0072f5;
+  --focus: hsla(212, 100%, 48%, 1);
 
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-muted: var(--muted);
-  --color-accent: var(--accent);
-  --color-border: var(--border);
-  --color-card: var(--card);
-  --color-card-hover: var(--card-hover);
-  --color-surface: var(--surface);
+  --color-background: var(--color-bg);
+  --color-foreground: var(--color-fg);
+  --color-muted: var(--color-fg-muted);
+  --color-subtle: var(--color-fg-subtle);
+  --color-faint: var(--color-fg-faint);
+  --color-border: var(--color-border);
+  --color-surface: var(--color-surface);
+  --color-ship: var(--ship);
+  --color-preview: var(--preview);
+  --color-develop: var(--develop);
+  --color-link: var(--link);
   --font-sans: var(--font-sans);
   --font-mono: var(--font-mono);
 }
 
-* {
-  box-sizing: border-box;
-}
-
-/* Reset absoluto: cero border-radius en cualquier elemento */
-html, body, h1, h2, h3, h4, h5, h6, p, span, a, code, pre, kbd,
-button, input, select, textarea, blockquote, aside, figure, figcaption,
-li, dt, dd, form, fieldset, legend, table, thead, tbody, tr, th, td,
-progress, meter, article, section, div, header, footer, nav, main, aside {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  font: inherit;
-  text-decoration: none;
-  background: transparent;
-  outline: none;
-  border-radius: 0;
-}
+/* ================================================================
+   RESET — mínimo, NO destruye componentes
+   ================================================================ */
+*, *::before, *::after { box-sizing: border-box; }
 
 html, body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
+  margin: 0; padding: 0;
+  background: var(--color-bg);
+  color: var(--color-fg);
+  font-family: var(--font-sans), system-ui, -apple-system, 'Segoe UI', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: "liga" 1, "calt" 1;
+  line-height: 1.5;
 }
 
-body {
-  padding: 28px 20px;
-  line-height: 1.55;
-  letter-spacing: 0.01em;
+h1, h2, h3, h4, h5, h6, p, span, a, li, button, input, label {
+  font-feature-settings: "liga" 1, "calt" 1;
 }
 
-/* Todos los textos: blanco o blanco con opacidad */
-.foreground { color: rgba(255, 255, 255, var(--o-fg)); }
-.muted { color: rgba(255, 255, 255, var(--o-muted)); }
-.faint { color: rgba(255, 255, 255, var(--o-faint)); }
-.border-faint { border-color: rgba(255, 255, 255, var(--o-border)); }
-.border-strong { border-color: rgba(255, 255, 255, var(--o-border-strong)); }
+::selection { background: var(--color-fg); color: var(--color-bg); }
 
-::selection {
-  background: #ffffff;
-  color: #000000;
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
 }
 
-/* Scrollbar blanco/negro */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: var(--color-bg); }
+::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--color-fg-faint); }
+
+/* ================================================================
+   TYPOGRAPHY — Vercel compression
+   ================================================================ */
+.text-display {
+  font-size: clamp(40px, 6vw, 80px);
+  font-weight: 600;
+  line-height: 1.0;
+  letter-spacing: -2.88px;
 }
-::-webkit-scrollbar-track {
-  background: #000000;
+.text-section {
+  font-size: clamp(32px, 4vw, 48px);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -2.4px;
 }
-::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.15);
-  border-radius: 0;
+.text-card-title {
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.32px;
 }
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.35);
+.text-lead {
+  font-size: 20px;
+  line-height: 1.8;
+  color: var(--color-fg-muted);
+}
+.text-body {
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--color-fg-muted);
+}
+.text-mono {
+  font-family: var(--font-mono), ui-monospace, 'SF Mono', monospace;
+}
+.text-uppercase-mono {
+  font-family: var(--font-mono), monospace;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 500;
 }
 
-@keyframes packet-travel {
-  to { offset-distance: 100%; }
+/* ================================================================
+   LAYOUT
+   ================================================================ */
+.container {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 24px;
+  padding-right: 24px;
+}
+.section-pad { padding-top: 100px; padding-bottom: 100px; }
+@media (min-width: 1024px) {
+  .section-pad { padding-top: 120px; padding-bottom: 120px; }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  *[style*="offset-path"],
-  *[style*="offset-distance"],
-  html body *,
-  html body *::before,
-  html body *::after {
-    animation: none !important;
-    transition: none !important;
+/* ================================================================
+   KICKER (num — line — label)
+   ================================================================ */
+.kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.kicker .num {
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.8px;
+  color: var(--color-fg);
+}
+.kicker .line {
+  display: inline-block;
+  width: 32px;
+  height: 1px;
+  background: var(--color-border);
+}
+.kicker .label {
+  font-family: var(--font-mono), monospace;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--color-fg-subtle);
+}
+
+/* ================================================================
+   BUTTONS
+   ================================================================ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: var(--font-sans), sans-serif;
+  cursor: pointer;
+  transition: opacity 0.15s ease, box-shadow 0.15s ease;
+  text-decoration: none;
+  border: 0;
+  line-height: 1;
+}
+.btn-primary { background: var(--color-fg); color: var(--color-bg); }
+.btn-primary:hover { opacity: 0.85; }
+.btn-secondary {
+  background: var(--color-bg);
+  color: var(--color-fg);
+  box-shadow: 0 0 0 1px var(--ring-subtle);
+}
+.btn-secondary:hover { box-shadow: 0 0 0 1px var(--ring-strong); }
+
+/* ================================================================
+   CARD — multi-layer shadow stack + inset glow
+   ================================================================ */
+.card {
+  background: var(--color-bg);
+  padding: 32px;
+  border-radius: 12px;
+  box-shadow:
+    rgba(0,0,0,0.08) 0px 0px 0px 1px,
+    rgba(0,0,0,0.04) 0px 2px 2px,
+    #fafafa 0px 0px 0px 1px inset;
+  transition: box-shadow 0.2s ease;
+}
+.card:hover {
+  box-shadow:
+    rgba(0,0,0,0.12) 0px 0px 0px 1px,
+    rgba(0,0,0,0.06) 0px 4px 8px,
+    #fafafa 0px 0px 0px 1px inset;
+}
+.card .num {
+  font-family: var(--font-mono), monospace;
+  font-size: 12px;
+  color: var(--color-fg-subtle);
+  margin-bottom: 20px;
+  display: block;
+}
+.card h3 {
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.32px;
+  margin: 0 0 8px;
+  color: var(--color-fg);
+}
+.card p {
+  color: var(--color-fg-muted);
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ================================================================
+   CODE BLOCK (hero)
+   ================================================================ */
+.codeblock {
+  background: var(--color-bg);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow:
+    rgba(0,0,0,0.08) 0px 0px 0px 1px,
+    rgba(0,0,0,0.04) 0px 2px 2px,
+    #fafafa 0px 0px 0px 1px inset;
+}
+.codeblock-head {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--font-mono), monospace;
+  font-size: 12px;
+  color: var(--color-fg-subtle);
+}
+.codeblock-dots { display: flex; gap: 6px; }
+.codeblock-dots span {
+  width: 10px; height: 10px; border-radius: 50%;
+  box-shadow: 0 0 0 1px var(--color-border);
+  background: var(--color-surface);
+}
+.codeblock pre {
+  padding: 24px;
+  font-family: var(--font-mono), monospace;
+  font-size: 13px;
+  line-height: 1.7;
+  margin: 0;
+  overflow-x: auto;
+  background: var(--color-bg);
+  color: var(--color-fg);
+  font-feature-settings: "liga" 1;
+}
+.codeblock pre .tok-key { color: var(--develop); }
+.codeblock pre .tok-str { color: var(--ship); }
+.codeblock pre .tok-com { color: var(--color-fg-faint); }
+.codeblock pre .tok-num { color: var(--preview); }
+.codeblock pre .tok-prop { color: var(--color-fg); }
+.codeblock pre .tok-punct { color: var(--color-fg-subtle); }
+.codeblock-foot {
+  padding: 12px 16px;
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono), monospace;
+  font-size: 12px;
+  color: var(--color-fg-subtle);
+}
+
+/* ================================================================
+   WORKFLOW GRID (3-step pipeline)
+   ================================================================ */
+.workflow-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 0 0 1px var(--color-border);
+}
+@media (min-width: 768px) {
+  .workflow-grid { grid-template-columns: repeat(3, 1fr); }
+}
+.workflow-step {
+  padding: 40px 32px;
+  background: var(--color-bg);
+  border-bottom: 1px solid var(--color-border);
+}
+@media (min-width: 768px) {
+  .workflow-step {
+    border-right: 1px solid var(--color-border);
+    border-bottom: 0;
   }
+  .workflow-step:last-child { border-right: 0; }
+}
+.workflow-step .step-label {
+  font-family: var(--font-mono), monospace;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 24px;
+  display: block;
+}
+.workflow-step.develop .step-label { color: var(--develop); }
+.workflow-step.preview .step-label { color: var(--preview); }
+.workflow-step.ship .step-label { color: var(--ship); }
+.workflow-step h3 {
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: -0.96px;
+  margin: 0 0 12px;
+  color: var(--color-fg);
+}
+.workflow-step p {
+  color: var(--color-fg-muted);
+  font-size: 16px;
+  line-height: 1.6;
+  margin: 0;
+}
+.workflow-step .step-arrow {
+  margin-top: 24px;
+  color: var(--color-fg-faint);
+  font-family: var(--font-mono), monospace;
+  font-size: 12px;
 }
 
+/* ================================================================
+   FEATURES GRID
+   ================================================================ */
+.features-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+@media (min-width: 640px) { .features-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1024px) { .features-grid { grid-template-columns: repeat(3, 1fr); } }
+
+/* ================================================================
+   PILL BADGE
+   ================================================================ */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 12px;
+  background: #ebf5ff;
+  color: #0068d6;
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 500;
+}
+.pill .dot {
+  width: 6px; height: 6px; border-radius: 50%; background: currentColor;
+}
+
+/* ================================================================
+   NAV
+   ================================================================ */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--color-border);
+}
+.nav-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+}
+
+/* ================================================================
+   SECTION DIVIDERS
+   ================================================================ */
+.section-divider { border-bottom: 1px solid var(--color-border); }
+.section-divider-dark { border-bottom: 1px solid var(--color-fg); }
+
+/* ================================================================
+   CTA PANEL (dark inverted + radial glows)
+   ================================================================ */
+.cta-panel {
+  background: var(--color-fg);
+  color: var(--color-bg);
+  border-radius: 16px;
+  padding: 64px 32px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.cta-panel::before {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(255,91,79,0.18), transparent 45%),
+    radial-gradient(circle at 80% 80%, rgba(13,114,239,0.18), transparent 45%);
+  pointer-events: none;
+}
+.cta-panel > * { position: relative; }
+@media (min-width: 768px) {
+  .cta-panel { padding: 80px 60px; }
+}
+.cta-panel h2 {
+  color: var(--color-bg);
+  font-size: clamp(32px, 4vw, 48px);
+  font-weight: 600;
+  letter-spacing: -2.4px;
+  line-height: 1.05;
+  margin: 0 0 24px;
+}
+.cta-panel p {
+  color: rgba(255,255,255,0.7);
+  font-size: 18px;
+  line-height: 1.6;
+  max-width: 480px;
+  margin: 0 auto 40px;
+}
+.cta-form {
+  display: flex;
+  gap: 8px;
+  max-width: 400px;
+  margin: 0 auto;
+}
+.cta-form input {
+  flex: 1;
+  padding: 12px 16px;
+  border-radius: 6px;
+  border: 0;
+  background: rgba(255,255,255,0.1);
+  color: var(--color-bg);
+  font-size: 14px;
+  font-family: inherit;
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.2);
+}
+.cta-form input::placeholder { color: rgba(255,255,255,0.5); }
+.cta-form input:focus { outline: 0; box-shadow: 0 0 0 2px var(--develop); }
+.cta-form button {
+  background: var(--color-bg);
+  color: var(--color-fg);
+  padding: 12px 20px;
+  border-radius: 6px;
+  border: 0;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+/* ================================================================
+   COUNTER (hero metric)
+   ================================================================ */
+.counter {
+  display: inline-flex;
+  gap: 16px;
+  align-items: center;
+  font-size: 13px;
+  color: var(--color-fg-subtle);
+  font-family: var(--font-mono), monospace;
+}
+.counter strong {
+  color: var(--color-fg);
+  font-weight: 600;
+  font-size: 16px;
+}
+
+/* ================================================================
+   LINKS
+   ================================================================ */
+a { color: inherit; }
+.link-blue {
+  color: var(--link);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ================================================================
+   ICON SQUARE (feature card icon)
+   ================================================================ */
+.icon-square {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: var(--color-surface);
+  box-shadow: 0 0 0 1px var(--color-border);
+  display: inline-grid;
+  place-items: center;
+  margin-bottom: 20px;
+  font-family: var(--font-mono), monospace;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-fg-muted);
+}
+
+/* ================================================================
+   ANIMATIONS
+   ================================================================ */
 @keyframes pulse-soft {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.4; }
 }
+.animate-pulse-soft { animation: pulse-soft 2s ease-in-out infinite; }
 
-/* ASCII GRADIENT: capa que renderiza un degradado con chars en lugar de CSS.
-   Usar en una sección da el efecto "degradado semi ascii" de usecroma. */
-.ascii-gradient {
-  position: relative;
-  background: #000;
-}
-.ascii-gradient::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background-image:
-    linear-gradient(to right,
-      transparent 0%,
-      rgba(255,255,255,0.04) 30%,
-      rgba(255,255,255,0.10) 60%,
-      rgba(255,255,255,0.04) 100%);
-  z-index: 0;
-}
-
-/* Dot field: gradiente ASCII puro de puntitos blancos */
-.dot-field {
-  background-image: radial-gradient(rgba(255, 255, 255, 0.18) 1px, transparent 1px);
-  background-size: 14px 14px;
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
