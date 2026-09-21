@@ -99,7 +99,29 @@ listo para integrar.`}
               </DecryptReveal>
             </p>
 
-            <div className="flex flex-wrap gap-3">
+            {/* Concrete value: show real numbers, not vague promises */}
+            <div className="grid grid-cols-3 gap-4 max-w-xl pt-2">
+              <div className="border border-border bg-surface p-4">
+                <div className="text-2xl font-semibold tracking-tight">5</div>
+                <div className="text-xs text-muted mt-1">portales en 1 call</div>
+              </div>
+              <div className="border border-border bg-surface p-4">
+                <div className="text-2xl font-semibold tracking-tight">25000</div>
+                <div className="text-xs text-muted mt-1">
+                  <code className="text-foreground">"25,000 MXN"</code> →
+                  <br />
+                  <code className="text-foreground">{`{min:25000}`}</code>
+                </div>
+              </div>
+              <div className="border border-border bg-surface p-4">
+                <div className="text-2xl font-semibold tracking-tight">1</div>
+                <div className="text-xs text-muted mt-1">
+                  fila cuando sale en<br />2 portales
+                </div>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap gap-3 pt-2">
               <a href="#signup" className="btn btn-primary">
                 Probar demo →
               </a>
