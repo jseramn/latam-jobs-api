@@ -36,12 +36,21 @@ export const metadata: Metadata = {
       "Una API. Todas las bolsas de trabajo de LATAM. Sueldo parseado, deduplicado, listo para integrar.",
     type: "website",
     locale: "es_LA",
+    images: [
+      {
+        url: "/og-image.svg",
+        width: 1200,
+        height: 630,
+        alt: "LatamJobs API — Una API. Todas las bolsas de LATAM.",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "LatamJobs API",
     description:
       "Una API. Todas las bolsas de trabajo de LATAM. Sueldo parseado, deduplicado, listo para integrar.",
+    images: ["/og-image.svg"],
   },
 };
 
