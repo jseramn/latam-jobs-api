@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import type { ScrapedJob } from "@/lib/scrapers/bumeran";
 import { parseSalaryText } from "@/lib/scrapers/parse-salary";
 import { cache, CACHE_TTL } from "@/lib/cache";
+import { authenticateRequest, incrementUsage } from "@/lib/auth";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -161,6 +162,29 @@ function sampleResults(q: string, countries: string[]): NormalizedJob[] {
 }
 
 export async function GET(req: Request) {
+  // Phase 1: open access. Phase 2 (post-launch): require API key.
+  // Uncomment the block below when ready to enforce auth.
+  /*
+  const auth = await authenticateRequest(req);
+  if (!auth.ok) {
+    const status = auth.reason === "exceeded_limit" ? 429 : 401;
+    return NextResponse.json(
+      {
+        error: auth.reason ?? "unauthorized",
+        message: "Pass Authorization: Bearer sk_live_xxx",
+        upgrade_url: "https://latamjobs-api.jseramn.tech/billing",
+      },
+      {
+        status,
+        headers: {
+          "X-RateLimit-Limit": String(auth.key ? 0 : 0),
+          "X-RateLimit-Remaining": String(auth.remaining ?? 0),
+        },
+      },
+    );
+  }
+  */
+
   const url = new URL(req.url);
   const q = (url.searchParams.get("q") ?? "").toLowerCase().trim();
   const countryParam = (url.searchParams.get("country") ?? "mx,co,ar").toLowerCase();
