@@ -44,11 +44,11 @@ function TopBar() {
         <nav className="hidden md:flex items-center gap-1 text-sm">
           <TopBarLink href="#workflow">Workflow</TopBarLink>
           <TopBarLink href="#features">Features</TopBarLink>
-          <TopBarLink href="#signup">Sumate</TopBarLink>
+          <TopBarLink href="/billing">Pricing</TopBarLink>
           <TopBarLink href="/docs">Docs</TopBarLink>
         </nav>
-        <a href="#signup" className="btn btn-primary">
-          Sumate →
+        <a href="/billing" className="btn btn-primary">
+          Empezar →
         </a>
       </div>
     </header>
@@ -122,11 +122,11 @@ listo para integrar.`}
             </div>
 
             <div className="flex flex-wrap gap-3 pt-2">
-              <a href="#signup" className="btn btn-primary">
-                Probar demo →
+              <a href="/billing" className="btn btn-primary">
+                Empezar →
               </a>
               <a href="/docs" className="btn btn-secondary">
-                Leer docs
+                Ver docs
               </a>
             </div>
 
