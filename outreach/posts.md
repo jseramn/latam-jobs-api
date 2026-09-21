@@ -1,6 +1,7 @@
 # Outreach posts — ready to copy/paste once deployed
 
-URL once live: https://<your-vercel-url>
+URL once live: https://latamjobs-api.jseramn.tech
+API: https://latamjobs-api.jseramn.tech/api/v1/search?q=python&country=ar
 
 ---
 
@@ -13,7 +14,7 @@ URL once live: https://<your-vercel-url>
 I spent the last few days building something I wish existed when I was hiring in Colombia: a single REST API that returns jobs from Computrabajo, Bumeran, OCC, ZonaJobs, and Laborum in one call, with salary parsed into a number and currency.
 
 ```
-GET https://api.latam-jobs.dev/v1/search?q=desarrollador+python&country=mx,co,ar
+GET https://latamjobs-api.jseramn.tech/api/v1/search?q=desarrollador+python&country=mx,co,ar
 ```
 
 I put up a landing to validate demand before continuing. Looking for 30 recruiters or HR-tech builders in LATAM who'd genuinely use something like this. If we hit 30 in 48h, we ship.
@@ -23,7 +24,7 @@ What I need feedback on:
 - Which portals matter most for your stack?
 - Salary normalization — is parsing "MXN 25,000 - 35,000 mensuales" → `{min: 25000, max: 35000, currency: "MXN", period: "monthly"}` what you'd want?
 
-Landing: <URL>
+Landing: https://latamjobs-api.jseramn.tech
 
 If there's enough signal, I'll open a Discord for early testers next week. If not, I'll tell you what I learned and kill it.
 
@@ -48,7 +49,7 @@ Lo que me importa saber:
 - ¿Qué portales usan más para Argentina?
 - ¿Qué formato de salida les serviría?
 
-Landing: <URL>
+Landing: https://latamjobs-api.jseramn.tech
 
 — Manuel, armando solo en Bogotá 🇨🇴
 
@@ -58,12 +59,12 @@ Landing: <URL>
 
 Acabo de publicar una API que en una llamada devuelve ofertas de Computrabajo, Bumeran, OCC, ZonaJobs y Laborum — deduplicadas y con el sueldo parseado.
 
-GET /v1/search?q=desarrollador+python&country=mx,co,ar
+GET /api/v1/search?q=desarrollador+python&country=mx,co,ar
 → JSON con resultados, cada uno con salary.min, salary.max, currency, period
 
 Estoy validando con 30 recruiters o HR-tech builders de LATAM antes de seguir construyendo.
 
-Landing: <URL>
+Landing: https://latamjobs-api.jseramn.tech
 
 Si llegamos a 30 en 48h, lanzo con precio founding de $49/mes (después $99).
 Si no, lo mato y comparto qué aprendí.
@@ -96,7 +97,7 @@ Mi API:
 
 3/ Validando demanda con 30 recruiters / HR-tech builders de LATAM antes de seguir construyendo.
 
-Landing: <URL>
+Landing: https://latamjobs-api.jseramn.tech
 
 Si llegamos a 30 en 48h, lanzo. Si no, lo mato.
 
@@ -127,7 +128,7 @@ Lo que estoy armando:
 - Deduplicación por hash de oferta
 - Webhooks de cambios
 
-Landing: <URL>
+Landing: https://latamjobs-api.jseramn.tech
 
 Validando con 30 recruiters. Si llegamos a 30 en 48h, lo lanzo a $49/mes (después $99).
 
