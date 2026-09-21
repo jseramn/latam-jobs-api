@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import type { ScrapedJob } from "@/lib/scrapers/bumeran";
 import { parseSalaryText } from "@/lib/scrapers/parse-salary";
+import { cache, CACHE_TTL } from "@/lib/cache";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -179,9 +180,23 @@ export async function GET(req: Request) {
   const fetchedFrom: string[] = [];
   let realJobs: ScrapedJob[] = [];
 
-  // Try real scrapers with strict timeout (Vercel Hobby = 10s limit).
-  // Bumeran takes ~11s locally; cap at 8s to stay under serverless limits.
-  if (sources.includes("bumeran") && (countryParam.includes("ar") || sources.length > 1)) {
+  // 1. Try cache first (populated by /api/cron/scrape)
+  const cacheKey = `search:${q || "_"}:${countryParam}:${sources.join(",")}:${maxResults}`;
+  const cacheStore = cache();
+  try {
+    const cached = await cacheStore.get(cacheKey);
+    if (cached) {
+      const parsed = JSON.parse(cached) as { results: ScrapedJob[]; sources: string[] };
+      realJobs = parsed.results;
+      fetchedFrom.push(...parsed.sources, "cache");
+      warnings.push("served_from_cache");
+    }
+  } catch {
+    warnings.push("cache_read_failed");
+  }
+
+  // 2. Try live scraper only if cache miss AND we have sources enabled
+  if (realJobs.length === 0 && sources.includes("bumeran") && (countryParam.includes("ar") || sources.length > 1)) {
     try {
       const scraperModule = await import("@/lib/scrapers/bumeran");
       const jobs = await withTimeout(
@@ -192,6 +207,16 @@ export async function GET(req: Request) {
       if (jobs.length > 0) {
         realJobs.push(...jobs);
         fetchedFrom.push("bumeran");
+        // Populate cache for next request
+        try {
+          await cacheStore.set(
+            cacheKey,
+            JSON.stringify({ results: jobs, sources: ["bumeran"] }),
+            { ex: CACHE_TTL.search },
+          );
+        } catch {
+          warnings.push("cache_write_failed");
+        }
       } else {
         warnings.push("bumeran_timeout_or_empty");
       }
