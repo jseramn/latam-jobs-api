@@ -4,7 +4,8 @@ import { AsciiSweep } from "@/components/effects/AsciiSweep";
 
 export const metadata = {
   title: "Docs — LatamJobs API",
-  description: "Documentación técnica de LatamJobs API para recruiters y developers.",
+  description:
+    "Documentación técnica de LatamJobs API: endpoints REST, schema de respuesta, ejemplos curl.",
 };
 
 export default function DocsPage() {

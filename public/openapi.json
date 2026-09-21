@@ -1,0 +1,257 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "LatamJobs API",
+    "version": "0.1.0",
+    "description": "Single REST endpoint that unifies Computrabajo, Bumeran, OCC, ZonaJobs, and Laborum into one call. Salary parsed to number + currency. Deduplicated across portals. Currently in validation phase — sample data only (real scrapers pending 30 signups + external scraper service).",
+    "contact": {
+      "name": "Jose Ramon Garcia",
+      "email": "hola@jseramn.tech"
+    },
+    "license": {
+      "name": "Proprietary",
+      "url": "https://latamjobs-api.jseramn.tech"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://latamjobs-api.jseramn.tech",
+      "description": "Production"
+    },
+    {
+      "url": "http://localhost:3000",
+      "description": "Local development"
+    }
+  ],
+  "paths": {
+    "/api/v1/search": {
+      "get": {
+        "summary": "Search jobs across LATAM portals",
+        "description": "Returns jobs matching the query. Tries real scrapers first; falls back to sample data with `preview: true` flag. Never returns 5xx — always 200 with explicit warnings if data is not real.",
+        "operationId": "searchJobs",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "description": "Search query (job title, skill, company)",
+            "schema": { "type": "string", "default": "" },
+            "example": "python"
+          },
+          {
+            "name": "country",
+            "in": "query",
+            "description": "Comma-separated ISO country codes: mx, co, ar, cl, pe, uy, br",
+            "schema": { "type": "string", "default": "mx,co,ar" },
+            "example": "mx,co,ar"
+          },
+          {
+            "name": "sources",
+            "in": "query",
+            "description": "Comma-separated portal names to query",
+            "schema": { "type": "string", "default": "bumeran" },
+            "example": "bumeran,computrabajo"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Max results (1-50)",
+            "schema": { "type": "integer", "minimum": 1, "maximum": 50, "default": 20 }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Search results",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SearchResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/signup": {
+      "post": {
+        "summary": "Add email to early-access list",
+        "description": "Adds contact to Resend audience. Email confirmation sent automatically. Rate-limited to 5 signups per IP per hour.",
+        "operationId": "signupForEarlyAccess",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/SignupRequest" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Signup succeeded (or silently for honeypot)",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SignupResponse" }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid email or missing fields"
+          },
+          "429": {
+            "description": "Rate limited (>5 signups/hour from same IP)"
+          },
+          "503": {
+            "description": "Resend not configured"
+          }
+        }
+      }
+    },
+    "/api/stats": {
+      "get": {
+        "summary": "Get signup counter",
+        "description": "Returns current signup count + progress to goal of 30.",
+        "operationId": "getStats",
+        "responses": {
+          "200": {
+            "description": "Stats",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/StatsResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/healthz": {
+      "get": {
+        "summary": "Health check + env status",
+        "operationId": "healthCheck",
+        "responses": {
+          "200": {
+            "description": "Service is healthy",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HealthResponse" }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Job": {
+        "type": "object",
+        "required": ["id", "title", "company", "location", "source"],
+        "properties": {
+          "id": { "type": "string" },
+          "title": { "type": "string" },
+          "company": { "type": "string" },
+          "location": { "type": "string" },
+          "url": { "type": "string", "format": "uri" },
+          "source": {
+            "type": "string",
+            "enum": ["computrabajo", "bumeran", "occ", "zonajobs", "laborum", "elempleo"]
+          },
+          "posted_at": { "type": "string", "format": "date-time" },
+          "rating": { "type": "number", "minimum": 0, "maximum": 5 },
+          "salary": {
+            "$ref": "#/components/schemas/Salary"
+          }
+        }
+      },
+      "Salary": {
+        "type": "object",
+        "nullable": true,
+        "properties": {
+          "min": { "type": "number" },
+          "max": { "type": "number" },
+          "currency": {
+            "type": "string",
+            "nullable": true,
+            "enum": ["MXN", "COP", "ARS", "CLP", "BRL", "PEN", "UYU", "USD", null]
+          },
+          "period": {
+            "type": "string",
+            "nullable": true,
+            "enum": ["monthly", "yearly", "hourly", null]
+          }
+        }
+      },
+      "SearchResponse": {
+        "type": "object",
+        "required": ["results", "meta"],
+        "properties": {
+          "results": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Job" }
+          },
+          "meta": {
+            "type": "object",
+            "properties": {
+              "total": { "type": "integer" },
+              "fetched_ms": { "type": "integer" },
+              "sources": { "type": "array", "items": { "type": "string" } },
+              "countries": { "type": "array", "items": { "type": "string" } },
+              "query": { "type": "string" },
+              "preview": { "type": "boolean", "description": "true if sample data, false if real" },
+              "warnings": { "type": "array", "items": { "type": "string" } }
+            }
+          }
+        }
+      },
+      "SignupRequest": {
+        "type": "object",
+        "required": ["email"],
+        "properties": {
+          "email": { "type": "string", "format": "email", "maxLength": 254 },
+          "role": {
+            "type": "string",
+            "enum": ["recruiter", "agency", "hrtech", "developer", "other"]
+          },
+          "country": {
+            "type": "string",
+            "enum": ["MX", "CO", "AR", "CL", "PE", "UY", "OTHER"]
+          },
+          "company_url": {
+            "type": "string",
+            "description": "Honeypot field — must be empty. Silently succeeds if filled."
+          }
+        }
+      },
+      "SignupResponse": {
+        "type": "object",
+        "properties": {
+          "ok": { "type": "boolean" },
+          "duplicate": { "type": "boolean" }
+        }
+      },
+      "StatsResponse": {
+        "type": "object",
+        "properties": {
+          "signups": { "oneOf": [{ "type": "integer" }, { "type": "string", "enum": ["unknown"] }] },
+          "goal": { "type": "integer" },
+          "percent": { "type": "integer" },
+          "configured": { "type": "boolean" }
+        }
+      },
+      "HealthResponse": {
+        "type": "object",
+        "properties": {
+          "ok": { "type": "boolean" },
+          "service": { "type": "string" },
+          "version": { "type": "string" },
+          "uptime_seconds": { "type": "integer" },
+          "env": {
+            "type": "object",
+            "properties": {
+              "resend_configured": { "type": "boolean" },
+              "send_confirmation": { "type": "boolean" }
+            }
+          },
+          "endpoints": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    }
+  }
+}
