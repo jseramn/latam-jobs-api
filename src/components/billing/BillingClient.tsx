@@ -62,7 +62,7 @@ export default function BillingClient() {
   const onChoose = async (tier: "indie" | "scale") => {
     setError(null);
     const email = window.prompt(
-      "Email para la suscripción (te enviaremos el link de pago de Mercado Pago):",
+      "Email para la suscripción (te enviaremos el link de pago de Wompi):",
     );
     if (!email || !email.includes("@")) return;
 
@@ -78,8 +78,8 @@ export default function BillingClient() {
         setError(data.error ?? "Error creando checkout");
         return;
       }
-      if (data.init_point) {
-        window.location.href = data.init_point;
+      if (data.checkout_url) {
+        window.location.href = data.checkout_url;
       }
     } catch (e) {
       setError(e instanceof Error ? e.message : String(e));

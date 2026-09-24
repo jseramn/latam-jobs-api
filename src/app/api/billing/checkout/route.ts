@@ -1,6 +1,11 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { createMpPlan } from "@/lib/mercadopago";
+import {
+  PRICING_COP_CENTS,
+  TIER_LABEL,
+  generateReference,
+  buildCheckoutUrl,
+} from "@/lib/wompi";
 
 export const runtime = "nodejs";
 
@@ -9,10 +14,24 @@ const schema = z.object({
   tier: z.enum(["indie", "scale"]),
 });
 
+const BASE_URL =
+  process.env.NEXT_PUBLIC_BASE_URL ??
+  "https://latamjobs-api.jseramn.tech";
+
 export async function POST(req: Request) {
-  if (!process.env.MERCADO_PAGO_ACCESS_TOKEN) {
+  // Required env vars check (no value logging)
+  const required = [
+    "WOMPI_PUBLIC_KEY",
+    "WOMPI_PRIVATE_KEY",
+    "WOMPI_INTEGRITY_SECRET",
+  ];
+  const missing = required.filter((k) => !process.env[k]);
+  if (missing.length > 0) {
     return NextResponse.json(
-      { error: "mercadopago_not_configured", message: "Set MERCADO_PAGO_ACCESS_TOKEN in Vercel env vars." },
+      {
+        error: "wompi_not_configured",
+        message: `Set these env vars in Vercel: ${missing.join(", ")}`,
+      },
       { status: 503 },
     );
   }
@@ -35,17 +54,30 @@ export async function POST(req: Request) {
   const { email, tier } = parsed.data;
 
   try {
-    const plan = await createMpPlan(tier, email);
+    const reference = generateReference(tier, email);
+    const amountInCents = PRICING_COP_CENTS[tier];
+    const redirectUrl = `${BASE_URL}/billing/return`;
+
+    const checkoutUrl = buildCheckoutUrl({
+      reference,
+      amountInCents,
+      email,
+      tier,
+      redirectUrl,
+    });
+
     return NextResponse.json({
       ok: true,
-      plan_id: plan.id,
-      init_point: plan.init_point,
+      reference,
+      checkout_url: checkoutUrl,
+      amount_cop: amountInCents / 100,
       tier,
       email,
+      tier_label: TIER_LABEL[tier],
     });
   } catch (e) {
     return NextResponse.json(
-      { error: "mp_create_failed", detail: e instanceof Error ? e.message : String(e) },
+      { error: "wompi_build_failed", detail: e instanceof Error ? e.message : String(e) },
       { status: 502 },
     );
   }

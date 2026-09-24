@@ -4,7 +4,7 @@ import BillingClient from "@/components/billing/BillingClient";
 export const metadata: Metadata = {
   title: "Pricing — LatamJobs API",
   description:
-    "Indie $49 USD/mes y Scale $199 USD/mes. Pago recurrente vía Mercado Pago Colombia (COP).",
+    "Indie $49 USD/mes y Scale $199 USD/mes. Pago recurrente vía Wompi Colombia (COP).",
 };
 
 export default function BillingPage() {
@@ -26,8 +26,8 @@ export default function BillingPage() {
 
         <h1 className="text-section mt-4 mb-4">Elegí tu plan</h1>
         <p className="text-lead mb-10">
-          Pago mensual recurrente vía Mercado Pago (Colombia, COP). Cancelás
-          cuando quieras desde tu cuenta de MP. Sin contratos, sin setup fees.
+          Pago mensual recurrente vía Wompi (Colombia, COP). Cancelás
+          cuando quieras desde tu email de confirmación. Sin contratos, sin setup fees.
         </p>
 
         <BillingClient />
@@ -39,16 +39,16 @@ export default function BillingPage() {
               Cliqueás en el plan que querés y nos das tu email.
             </li>
             <li>
-              Te redirigimos a Mercado Pago (hosted checkout). Pagás con
-              tarjeta crédito/débito, PSE, Nequi o Daviplata.
+              Te redirigimos a Wompi (hosted checkout). Pagás con
+              tarjeta crédito/débito, PSE, Nequi o Botón Bancolombia.
             </li>
             <li>
               Una vez confirmado el pago, te llega un email con tu API key y
               acceso inmediato a <code>/v1/search</code>.
             </li>
             <li>
-              La suscripción se renueva automáticamente cada mes. Cancelás
-              cuando quieras desde tu cuenta de MP.
+              El cobro se renueva cada mes. Te llega recordatorio 3 días antes.
+              Cancelás cuando quieras desde el link en el email.
             </li>
           </ol>
         </div>
