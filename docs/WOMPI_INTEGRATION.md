@@ -17,7 +17,7 @@
 | Events webhook env var | `WOMPI_EVENTS_SECRET` (prod_events_xxx) |
 | Production base URL | https://production.wompi.co |
 | Sandbox base URL | https://sandbox.wompi.co |
-| Our webhook URL | https://latamjobs-api.jseramn.tech/api/billing/webhook |
+| Our webhook URL (Events URL) | `https://latamjobs-api.jseramn.tech/api/billing/webhook` |
 | Health check | https://latamjobs-api.jseramn.tech/api/healthz |
 | Test script | `bash scripts/test-wompi.sh` |
 
@@ -69,6 +69,11 @@ In https://dashboard.wompi.co → Commerce → Events → set:
 ```
 https://latamjobs-api.jseramn.tech/api/billing/webhook
 ```
+
+Important: this exact URL must be set as your "Events URL" in Wompi's
+dashboard for production events to be delivered to us. Without it,
+Wompi won't notify us when a payment is approved, and the customer
+won't receive their API key.
 
 ### Acceptance tokens (habeas data compliance)
 
