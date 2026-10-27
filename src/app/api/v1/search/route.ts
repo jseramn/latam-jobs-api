@@ -11,8 +11,7 @@ export const dynamic = "force-dynamic";
  * v1 search endpoint. Tries real scrapers with strict timeouts;
  * always falls back to sample data with `preview: true` flag if scrapers fail.
  *
- * Auth: requires `Authorization: Bearer <api_key>` header in production.
- * For now (validating demand), it's open.
+ * Auth: requires `Authorization: Bearer <api_key>`.
  *
  * Reliability contract: this endpoint NEVER returns 5xx for client errors.
  * If the scraper is broken, it returns sample data + a `warning` field.
@@ -162,11 +161,8 @@ function sampleResults(q: string, countries: string[]): NormalizedJob[] {
 }
 
 export async function GET(req: Request) {
-  // Phase 1: open access. Phase 2 (post-launch): require API key.
-  // Uncomment the block below when ready to enforce auth.
-  /*
   const auth = await authenticateRequest(req);
-  if (!auth.ok) {
+  if (!auth.ok || !auth.key) {
     const status = auth.reason === "exceeded_limit" ? 429 : 401;
     return NextResponse.json(
       {
@@ -174,16 +170,9 @@ export async function GET(req: Request) {
         message: "Pass Authorization: Bearer sk_live_xxx",
         upgrade_url: "https://latamjobs-api.jseramn.tech/billing",
       },
-      {
-        status,
-        headers: {
-          "X-RateLimit-Limit": String(auth.key ? 0 : 0),
-          "X-RateLimit-Remaining": String(auth.remaining ?? 0),
-        },
-      },
+      { status },
     );
   }
-  */
 
   const url = new URL(req.url);
   const q = (url.searchParams.get("q") ?? "").toLowerCase().trim();
@@ -250,6 +239,7 @@ export async function GET(req: Request) {
   }
 
   const elapsed = Date.now() - start;
+  await incrementUsage(auth.key.id);
 
   // Real data path
   if (realJobs.length > 0) {
