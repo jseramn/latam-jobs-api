@@ -7,19 +7,17 @@ export const dynamic = "force-dynamic";
 /**
  * Vercel Cron endpoint. Schedule in vercel.json: every 15 min.
  *
- * Auth: requires `Authorization: Bearer <CRON_SECRET>` header from Vercel.
- * Falls back to no-auth when CRON_SECRET is unset (dev mode).
+ * Auth: requires `Authorization: Bearer <CRON_SECRET>`.
+ * Requests are rejected when the secret is missing or does not match.
  *
  * Phase 1: stores a heartbeat record. Real scraper integration comes
  * after we hit 30 signups and validate demand.
  */
 export async function GET(req: Request) {
   const cronSecret = process.env.CRON_SECRET;
-  if (cronSecret) {
-    const auth = req.headers.get("authorization");
-    if (auth !== `Bearer ${cronSecret}`) {
-      return NextResponse.json({ error: "unauthorized" }, { status: 401 });
-    }
+  const auth = req.headers.get("authorization");
+  if (!cronSecret || auth !== `Bearer ${cronSecret}`) {
+    return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   }
 
   const start = Date.now();
